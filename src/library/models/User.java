@@ -1,6 +1,7 @@
 package library.models;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -88,5 +89,24 @@ public class User {
         
         Database.closeConnection(conn);
         return users;
+    }
+    
+    public static void insertUser(String name, String email, String phoneNumber) {
+        String query = "INSERT INTO users (name, email, phone_number) VALUES (?, ?, ?)";
+        
+        Connection conn = Database.getConnection();
+        
+        try {
+        	PreparedStatement stmt = conn.prepareStatement(query);
+        	
+            stmt.setString(1, name);
+            stmt.setString(2, email);
+            stmt.setString(3, phoneNumber);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
+        }
     }
 }

@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import library.Library;
+import library.models.User;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -77,6 +81,22 @@ public class UserWindow extends JFrame {
 		
 		JButton confirmButton = new JButton("Insert");
 		confirmButton.setBounds(330, 232, 106, 27);
+		confirmButton.addActionListener(e -> insertUserIntoDatabase());
 		contentPane.add(confirmButton);
+	}
+	
+	private void insertUserIntoDatabase() {
+	    String name = nameTextField.getText().trim();
+	    String email = emailTextField.getText().trim();
+	    String phoneNumber = phoneNumberTextField.getText().trim();
+
+	     if (name.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
+	        System.out.println("Please fill in all fields.");
+	    } else {
+		    User.insertUser(name, email, phoneNumber);
+	        Library.LoadUsersIntoTable();
+		    System.out.println("User inserted successfully.");
+	        dispose();
+	    }
 	}
 }
