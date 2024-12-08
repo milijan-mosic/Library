@@ -1,12 +1,14 @@
 package library;
 
 import java.awt.EventQueue;
+import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JTable;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
+import library.models.Book;
 import library.models.Database;
+import library.models.User;
 import library.utils.WindowUtils;
 import library.windows.BookWindow;
 import library.windows.UserWindow;
@@ -51,7 +53,7 @@ public class Library {
 	
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1024, 1033);
+		frame.setBounds(100, 100, 1024, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -62,7 +64,7 @@ public class Library {
 		frame.getContentPane().add(bookTable);
 
 		btnAddBook = new JButton("Add book");
-		btnAddBook.setBounds(516, 381, 128, 27);
+		btnAddBook.setBounds(12, 381, 128, 27);
 		btnAddBook.addActionListener(e -> {
 		    WindowUtils.openWindowWithButtonControl(btnAddBook, new BookWindow());
 		});
@@ -75,7 +77,7 @@ public class Library {
 		frame.getContentPane().add(userTable);
 
 		btnAddUser = new JButton("Add user");
-		btnAddUser.setBounds(12, 381, 128, 27);
+		btnAddUser.setBounds(516, 381, 128, 27);
 		btnAddUser.addActionListener(e -> {
 		    WindowUtils.openWindowWithButtonControl(btnAddUser, new UserWindow());
 		});
@@ -90,5 +92,33 @@ public class Library {
 		btnReturnBook = new JButton("Return book");
 		btnReturnBook.setBounds(12, 700, 128, 27);
 		frame.getContentPane().add(btnReturnBook);
+		
+		//
+        loadBooksIntoTable();
+        loadUsersIntoTable();
 	}
+	
+	private void loadBooksIntoTable() {
+        List<Object[]> books = Book.getAllBooks();
+        
+        String[] columnNames = {"ID", "Title", "Author", "Release Date"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        for (Object[] book : books) {
+            tableModel.addRow(book);
+        }
+        
+        bookTable.setModel(tableModel);
+    }
+	
+	private void loadUsersIntoTable() {
+        List<Object[]> users = User.getAllUsers();
+        
+        String[] columnNames = {"ID", "Name", "Email", "Phone Number"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        for (Object[] user : users) {
+            tableModel.addRow(user);
+        }
+        
+        userTable.setModel(tableModel);
+    }
 }

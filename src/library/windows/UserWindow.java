@@ -14,7 +14,7 @@ public class UserWindow extends JFrame {
 	private JPanel contentPane;
 	private JTextField nameTextField;
 	private JTextField emailTextField;
-	private JTextField phoneTextField;
+	private JTextField phoneNumberTextField;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -59,14 +59,14 @@ public class UserWindow extends JFrame {
 		
 		//
 		
-		JLabel phoneLabel = new JLabel("Phone");
-		phoneLabel.setBounds(12, 134, 64, 16);
-		contentPane.add(phoneLabel);
+		JLabel phoneNumberLabel = new JLabel("Phone Number");
+		phoneNumberLabel.setBounds(12, 134, 64, 16);
+		contentPane.add(phoneNumberLabel);
 		
-		phoneTextField = new JTextField();
-		phoneTextField.setColumns(10);
-		phoneTextField.setBounds(12, 162, 164, 21);
-		contentPane.add(phoneTextField);
+		phoneNumberTextField = new JTextField();
+		phoneNumberTextField.setColumns(10);
+		phoneNumberTextField.setBounds(12, 162, 164, 21);
+		contentPane.add(phoneNumberTextField);
 		
 		//
 		

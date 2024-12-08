@@ -1,17 +1,24 @@
 package library.models;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Book {
     private String id;
-    private String name;
+    private String title;
     private String author;
     private String category;
     private String ownerId;
     private int releaseDate;
 
     // Constructor
-    public Book(String id, String name, String author, String category, String ownerId, int releaseDate) {
+    public Book(String id, String title, String author, String category, String ownerId, int releaseDate) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.author = author;
         this.category = category;
         this.ownerId = ownerId;
@@ -23,8 +30,8 @@ public class Book {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getAuthor() {
@@ -48,8 +55,8 @@ public class Book {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setAuthor(String author) {
@@ -72,11 +79,37 @@ public class Book {
     public String toString() {
         return "Book{" +
                 "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", category='" + category + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", releaseDate=" + releaseDate +
                 '}';
+    }
+    
+
+    public static List<Object[]> getAllBooks() {
+        List<Object[]> books = new ArrayList<>();
+        String query = "SELECT * FROM books";
+
+        Connection conn = Database.getConnection();
+        
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Object[] book = new Object[4];
+                book[0] = rs.getInt("id");
+                book[1] = rs.getString("title");
+                book[2] = rs.getString("author");
+                book[3] = rs.getDate("release_date");
+                books.add(book);            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Database.closeConnection(conn);
+        return books;
     }
 }

@@ -15,7 +15,6 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
@@ -23,9 +22,9 @@ import javax.swing.JTextField;
 public class BookWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField nameTextField;
+	private JTextField titleTextField;
 	private JTextField emailTextField;
-	private JTextField phoneTextField;
+	private JTextField phoneNumberTextField;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -48,14 +47,14 @@ public class BookWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel nameLabel = new JLabel("Name");
-		nameLabel.setBounds(12, 12, 64, 16);
-		contentPane.add(nameLabel);
+		JLabel titleLabel = new JLabel("Title");
+		titleLabel.setBounds(12, 12, 64, 16);
+		contentPane.add(titleLabel);
 
-		nameTextField = new JTextField();
-		nameTextField.setBounds(12, 40, 256, 21);
-		contentPane.add(nameTextField);
-		nameTextField.setColumns(10);
+		titleTextField = new JTextField();
+		titleTextField.setBounds(12, 40, 256, 21);
+		contentPane.add(titleTextField);
+		titleTextField.setColumns(10);
 		
 		//
 		
@@ -70,19 +69,19 @@ public class BookWindow extends JFrame {
 		
 		//
 		
-		JLabel phoneLabel = new JLabel("Category");
-		phoneLabel.setBounds(12, 134, 64, 16);
-		contentPane.add(phoneLabel);
+		JLabel phoneNumberLabel = new JLabel("Category");
+		phoneNumberLabel.setBounds(12, 134, 64, 16);
+		contentPane.add(phoneNumberLabel);
 		
-		phoneTextField = new JTextField();
-		phoneTextField.setColumns(10);
-		phoneTextField.setBounds(12, 162, 164, 21);
-		contentPane.add(phoneTextField);
+		phoneNumberTextField = new JTextField();
+		phoneNumberTextField.setColumns(10);
+		phoneNumberTextField.setBounds(12, 162, 164, 21);
+		contentPane.add(phoneNumberTextField);
 		
 		//
 
         JLabel releaseDateLabel = new JLabel("Release date");
-        releaseDateLabel.setBounds(12, 190, 81, 16);
+        releaseDateLabel.setBounds(12, 195, 81, 16);
         contentPane.add(releaseDateLabel);
 
         UtilDateModel model = new UtilDateModel();
@@ -93,7 +92,7 @@ public class BookWindow extends JFrame {
 
         JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-        datePicker.setBounds(12, 218, 164, 27);
+        datePicker.setBounds(12, 223, 164, 27);
         contentPane.add(datePicker);
 		
 		//

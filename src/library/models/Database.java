@@ -37,7 +37,7 @@ public class Database {
         String createBooksTable = """
             CREATE TABLE IF NOT EXISTS books (
                 id TEXT PRIMARY KEY,
-                name TEXT NOT NULL,
+                title TEXT NOT NULL,
                 author TEXT NOT NULL,
                 category TEXT NOT NULL,
                 owner_id TEXT,
@@ -50,7 +50,7 @@ public class Database {
                 id TEXT PRIMARY KEY,
                 name TEXT NOT NULL,
                 email TEXT NOT NULL,
-                phone TEXT
+                phone_number TEXT
             );
         """;
 
@@ -81,14 +81,14 @@ public class Database {
     
     public static void insertDummyData() {
         String insertBooks = """
-            INSERT INTO books (id, name, author, category, owner_id, release_date) VALUES
+            INSERT INTO books (id, title, author, category, owner_id, release_date) VALUES
             ('1', 'The Great Gatsby', 'F. Scott Fitzgerald', 'Fiction', '1', 1925),
             ('2', '1984', 'George Orwell', 'Dystopian', '2', 1949),
             ('3', 'To Kill a Mockingbird', 'Harper Lee', 'Fiction', '2', 1960);
         """;
 
         String insertUsers = """
-            INSERT INTO users (id, name, email, phone) VALUES
+            INSERT INTO users (id, name, email, phone_number) VALUES
             ('1', 'Admin User', 'admin@example.com', '1234567890'),
             ('2', 'Guest User', 'guest@example.com', '0987654321');
         """;
