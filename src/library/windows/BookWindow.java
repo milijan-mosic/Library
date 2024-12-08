@@ -19,18 +19,22 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 
+import library.Library;
+import library.models.Book;
+
 public class BookWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField titleTextField;
 	private JTextField emailTextField;
 	private JTextField phoneNumberTextField;
+	private JDatePickerImpl datePicker;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UserWindow frame = new UserWindow();
+					BookWindow frame = new BookWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -91,7 +95,7 @@ public class BookWindow extends JFrame {
         properties.put("text.year", "Year");
 
         JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         datePicker.setBounds(12, 223, 164, 27);
         contentPane.add(datePicker);
 		
@@ -104,7 +108,32 @@ public class BookWindow extends JFrame {
 		
 		JButton confirmButton = new JButton("Insert");
 		confirmButton.setBounds(330, 382, 106, 27);
+		confirmButton.addActionListener(e -> insertBookToDatabase());
 		contentPane.add(confirmButton);
+	}
+
+	private void insertBookToDatabase() {
+	    String title = titleTextField.getText();
+	    String author = emailTextField.getText();
+	    String category = phoneNumberTextField.getText();
+
+	    Date selectedDate = (Date) datePicker.getModel().getValue();
+	    int releaseDate = 0;
+	    
+	    if (selectedDate != null) {
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(selectedDate);
+	        releaseDate = calendar.get(Calendar.YEAR);
+	    }
+
+	    if (title.isEmpty() || author.isEmpty() || category.isEmpty()) {
+	        System.out.println("All fields must be filled!");
+	    } else {
+	        Book.insertBook(title, author, category, "1", releaseDate);
+	        Library.LoadBooksIntoTable();
+	        System.out.println("Book inserted successfully.");
+	        dispose();
+	    }
 	}
 }
 

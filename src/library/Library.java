@@ -15,8 +15,8 @@ import library.windows.UserWindow;
 
 public class Library {
 	private JFrame frame;
-	private JTable bookTable;
-	private JTable userTable;
+	private static JTable bookTable;
+	private static JTable userTable;
 	private JTable transactionTable;
 	private JButton btnAddBook;
 	private JButton btnAddUser;
@@ -94,14 +94,14 @@ public class Library {
 		frame.getContentPane().add(btnReturnBook);
 		
 		//
-        loadBooksIntoTable();
-        loadUsersIntoTable();
+        LoadBooksIntoTable();
+        LoadUsersIntoTable();
 	}
 	
-	private void loadBooksIntoTable() {
+	public static void LoadBooksIntoTable() {
         List<Object[]> books = Book.getAllBooks();
         
-        String[] columnNames = {"ID", "Title", "Author", "Release Date"};
+        String[] columnNames = {"Counter", "Title", "Author", "Category", "Owner", "Release Date"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         for (Object[] book : books) {
             tableModel.addRow(book);
@@ -110,12 +110,13 @@ public class Library {
         bookTable.setModel(tableModel);
     }
 	
-	private void loadUsersIntoTable() {
+	public static void LoadUsersIntoTable() {
         List<Object[]> users = User.getAllUsers();
         
-        String[] columnNames = {"ID", "Name", "Email", "Phone Number"};
+        String[] columnNames = {"Counter", "Name", "Email", "Phone Number"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         for (Object[] user : users) {
+	        System.out.println(user[3]);
             tableModel.addRow(user);
         }
         

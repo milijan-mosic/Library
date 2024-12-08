@@ -36,7 +36,7 @@ public class Database {
     public static void initializeDatabase() {
         String createBooksTable = """
             CREATE TABLE IF NOT EXISTS books (
-                id TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
                 author TEXT NOT NULL,
                 category TEXT NOT NULL,
@@ -47,7 +47,7 @@ public class Database {
 
         String createUsersTable = """
             CREATE TABLE IF NOT EXISTS users (
-                id TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 email TEXT NOT NULL,
                 phone_number TEXT
@@ -56,7 +56,7 @@ public class Database {
 
         String createTransactionsTable = """
             CREATE TABLE IF NOT EXISTS transactions (
-                id TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 book_id TEXT NOT NULL,
                 owner_id TEXT NOT NULL,
                 lent_date INTEGER,
@@ -80,17 +80,17 @@ public class Database {
     }
     
     public static void insertDummyData() {
-        String insertBooks = """
-            INSERT INTO books (id, title, author, category, owner_id, release_date) VALUES
-            ('1', 'The Great Gatsby', 'F. Scott Fitzgerald', 'Fiction', '1', 1925),
-            ('2', '1984', 'George Orwell', 'Dystopian', '2', 1949),
-            ('3', 'To Kill a Mockingbird', 'Harper Lee', 'Fiction', '2', 1960);
-        """;
-
         String insertUsers = """
             INSERT INTO users (id, name, email, phone_number) VALUES
             ('1', 'Admin User', 'admin@example.com', '1234567890'),
             ('2', 'Guest User', 'guest@example.com', '0987654321');
+        """;
+        
+        String insertBooks = """
+            INSERT INTO books (id, title, author, category, owner_id, release_date) VALUES
+            ('1', 'The Great Gatsby', 'F. Scott Fitzgerald', 'Fiction', '1', 1925),
+            ('2', '1984', 'George Orwell', 'Dystopian', '1', 1949),
+            ('3', 'To Kill a Mockingbird', 'Harper Lee', 'Fiction', '1', 1960);
         """;
 
         Connection conn = Database.getConnection();
@@ -98,15 +98,14 @@ public class Database {
             PreparedStatement stmtBooks = conn.prepareStatement(insertBooks);
             PreparedStatement stmtUsers = conn.prepareStatement(insertUsers);
             		
-            // Insert data into books and users
             stmtBooks.executeUpdate();
             stmtUsers.executeUpdate();
-            
+
+            closeConnection(conn);
             System.out.println("Dummy data inserted successfully.");
-            closeConnection(conn);
         } catch (SQLException e) {
-            e.printStackTrace();
             closeConnection(conn);
+            e.printStackTrace();
         }
     }
     
@@ -122,8 +121,8 @@ public class Database {
             closeConnection(conn);
             return rs.next(); 
         } catch (SQLException e) {
-            e.printStackTrace();
             closeConnection(conn);
+            e.printStackTrace();
             return false;
         }
     }

@@ -60,7 +60,7 @@ public class UserWindow extends JFrame {
 		//
 		
 		JLabel phoneNumberLabel = new JLabel("Phone Number");
-		phoneNumberLabel.setBounds(12, 134, 64, 16);
+		phoneNumberLabel.setBounds(12, 134, 106, 16);
 		contentPane.add(phoneNumberLabel);
 		
 		phoneNumberTextField = new JTextField();

@@ -90,8 +90,8 @@ public class Book {
 
     public static List<Object[]> getAllBooks() {
         List<Object[]> books = new ArrayList<>();
-        String query = "SELECT * FROM books";
 
+        String query = "SELECT * FROM books";
         Connection conn = Database.getConnection();
         
         try {
@@ -99,11 +99,13 @@ public class Book {
             ResultSet rs = stmt.executeQuery();
             
             while (rs.next()) {
-                Object[] book = new Object[4];
+                Object[] book = new Object[6];
                 book[0] = rs.getInt("id");
                 book[1] = rs.getString("title");
                 book[2] = rs.getString("author");
-                book[3] = rs.getDate("release_date");
+                book[3] = rs.getString("category");
+                book[4] = rs.getString("owner_id");
+                book[5] = rs.getString("release_date");
                 books.add(book);            }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,5 +113,24 @@ public class Book {
 
         Database.closeConnection(conn);
         return books;
+    }
+    
+    public static void insertBook(String title, String author, String category, String ownerId, int releaseDate) {
+        String query = "INSERT INTO books (title, author, category, owner_id, release_date) VALUES (?, ?, ?, ?, ?)";
+
+        Connection conn = Database.getConnection();
+        
+        try {
+        	PreparedStatement stmt = conn.prepareStatement(query);
+            
+            stmt.setString(1, title);
+            stmt.setString(2, author);
+            stmt.setString(3, category);
+            stmt.setString(4, ownerId);
+            stmt.setInt(5, releaseDate);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
