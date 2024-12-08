@@ -14,7 +14,7 @@ import library.windows.BookWindow;
 import library.windows.UserWindow;
 
 public class Library {
-	private JFrame frmMilijanMosic;
+	private JFrame frame;
 	private static JTable bookTable;
 	private static JTable userTable;
 	private JTable transactionTable;
@@ -36,7 +36,7 @@ public class Library {
 		            }
 		            
 					Library window = new Library();
-					window.frmMilijanMosic.setVisible(true);
+					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -44,55 +44,52 @@ public class Library {
 		});
 	}
 
-	/*
-	 * Create the application.
-	 */
 	public Library() {
 		initialize();
 	}
 	
 	private void initialize() {
-		frmMilijanMosic = new JFrame();
-		frmMilijanMosic.setTitle("Milijan Mosic - MIT 5/24");
-		frmMilijanMosic.setBounds(100, 100, 1024, 768);
-		frmMilijanMosic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmMilijanMosic.getContentPane().setLayout(null);
+		frame = new JFrame();
+		frame.setTitle("Milijan Mosic - MIT 5/24");
+		frame.setBounds(100, 100, 1024, 768);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 		
 		//
 		
 		bookTable = new JTable();
 		bookTable.setBounds(12, 12, 492, 357);
-		frmMilijanMosic.getContentPane().add(bookTable);
+		frame.getContentPane().add(bookTable);
 
 		btnAddBook = new JButton("Add book");
 		btnAddBook.setBounds(12, 381, 128, 27);
 		btnAddBook.addActionListener(e -> {
 		    WindowUtils.openWindowWithButtonControl(btnAddBook, new BookWindow());
 		});
-		frmMilijanMosic.getContentPane().add(btnAddBook);
+		frame.getContentPane().add(btnAddBook);
 		
 		//
 		
 		userTable = new JTable();
 		userTable.setBounds(516, 12, 492, 357);
-		frmMilijanMosic.getContentPane().add(userTable);
+		frame.getContentPane().add(userTable);
 
 		btnAddUser = new JButton("Add user");
 		btnAddUser.setBounds(516, 381, 128, 27);
 		btnAddUser.addActionListener(e -> {
 		    WindowUtils.openWindowWithButtonControl(btnAddUser, new UserWindow());
 		});
-		frmMilijanMosic.getContentPane().add(btnAddUser);
+		frame.getContentPane().add(btnAddUser);
 		
 		//
 		
 		transactionTable = new JTable();
 		transactionTable.setBounds(12, 420, 996, 268);
-		frmMilijanMosic.getContentPane().add(transactionTable);
+		frame.getContentPane().add(transactionTable);
 		
 		btnReturnBook = new JButton("Return book");
 		btnReturnBook.setBounds(12, 700, 128, 27);
-		frmMilijanMosic.getContentPane().add(btnReturnBook);
+		frame.getContentPane().add(btnReturnBook);
 		
 		//
         LoadBooksIntoTable();
