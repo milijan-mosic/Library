@@ -1,0 +1,57 @@
+# Ignore compiled files
+*.class
+
+# Ignore log files and temporary files
+*.log
+*.tmp
+*.swp
+*.bak
+
+# Ignore IDE configuration files (for popular IDEs)
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse
+.settings/
+*.launch
+*.project
+*.classpath
+
+# NetBeans
+nbproject/
+
+# Ignore build directories
+/build/
+/out/
+
+# Ignore Maven and Gradle directories
+/.mvn/
+.gradle/
+/target/
+
+# Ignore dependency directories
+/lib/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore JDK-specific files
+*.jar
+*.war
+*.ear
+*.class
+
+# Ignore Maven wrapper files
+.mvnw
+.mvnw.cmd
+
+# Ignore Gradle wrapper files
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# Mine
+*.db
