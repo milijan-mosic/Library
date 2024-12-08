@@ -26,7 +26,7 @@ public class BookWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField titleTextField;
-	private JTextField emailTextField;
+	private JTextField authorTextField;
 	private JTextField phoneNumberTextField;
 	private JDatePickerImpl datePicker;
 
@@ -62,14 +62,14 @@ public class BookWindow extends JFrame {
 		
 		//
 		
-		JLabel emailLabel = new JLabel("Author");
-		emailLabel.setBounds(12, 73, 64, 16);
-		contentPane.add(emailLabel);
+		JLabel authorLabel = new JLabel("Author");
+		authorLabel.setBounds(12, 73, 64, 16);
+		contentPane.add(authorLabel);
 		
-		emailTextField = new JTextField();
-		emailTextField.setColumns(10);
-		emailTextField.setBounds(12, 101, 164, 21);
-		contentPane.add(emailTextField);
+		authorTextField = new JTextField();
+		authorTextField.setColumns(10);
+		authorTextField.setBounds(12, 101, 164, 21);
+		contentPane.add(authorTextField);
 		
 		//
 		
@@ -114,7 +114,7 @@ public class BookWindow extends JFrame {
 
 	private void insertBookToDatabase() {
 	    String title = titleTextField.getText();
-	    String author = emailTextField.getText();
+	    String author = authorTextField.getText();
 	    String category = phoneNumberTextField.getText();
 
 	    Date selectedDate = (Date) datePicker.getModel().getValue();
@@ -127,11 +127,11 @@ public class BookWindow extends JFrame {
 	    }
 
 	    if (title.isEmpty() || author.isEmpty() || category.isEmpty()) {
-	        System.out.println("All fields must be filled!");
+	        System.out.println("All fields must be filled");
 	    } else {
 	        Book.insertBook(title, author, category, "1", releaseDate);
 	        Library.LoadBooksIntoTable();
-	        System.out.println("Book inserted successfully.");
+	        System.out.println("Book inserted successfully");
 	        dispose();
 	    }
 	}

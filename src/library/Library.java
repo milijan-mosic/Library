@@ -14,7 +14,7 @@ import library.windows.BookWindow;
 import library.windows.UserWindow;
 
 public class Library {
-	private JFrame frame;
+	private JFrame frmMilijanMosic;
 	private static JTable bookTable;
 	private static JTable userTable;
 	private JTable transactionTable;
@@ -36,7 +36,7 @@ public class Library {
 		            }
 		            
 					Library window = new Library();
-					window.frame.setVisible(true);
+					window.frmMilijanMosic.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -52,46 +52,47 @@ public class Library {
 	}
 	
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 1024, 768);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmMilijanMosic = new JFrame();
+		frmMilijanMosic.setTitle("Milijan Mosic - MIT 5/24");
+		frmMilijanMosic.setBounds(100, 100, 1024, 768);
+		frmMilijanMosic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmMilijanMosic.getContentPane().setLayout(null);
 		
 		//
 		
 		bookTable = new JTable();
 		bookTable.setBounds(12, 12, 492, 357);
-		frame.getContentPane().add(bookTable);
+		frmMilijanMosic.getContentPane().add(bookTable);
 
 		btnAddBook = new JButton("Add book");
 		btnAddBook.setBounds(12, 381, 128, 27);
 		btnAddBook.addActionListener(e -> {
 		    WindowUtils.openWindowWithButtonControl(btnAddBook, new BookWindow());
 		});
-		frame.getContentPane().add(btnAddBook);
+		frmMilijanMosic.getContentPane().add(btnAddBook);
 		
 		//
 		
 		userTable = new JTable();
 		userTable.setBounds(516, 12, 492, 357);
-		frame.getContentPane().add(userTable);
+		frmMilijanMosic.getContentPane().add(userTable);
 
 		btnAddUser = new JButton("Add user");
 		btnAddUser.setBounds(516, 381, 128, 27);
 		btnAddUser.addActionListener(e -> {
 		    WindowUtils.openWindowWithButtonControl(btnAddUser, new UserWindow());
 		});
-		frame.getContentPane().add(btnAddUser);
+		frmMilijanMosic.getContentPane().add(btnAddUser);
 		
 		//
 		
 		transactionTable = new JTable();
 		transactionTable.setBounds(12, 420, 996, 268);
-		frame.getContentPane().add(transactionTable);
+		frmMilijanMosic.getContentPane().add(transactionTable);
 		
 		btnReturnBook = new JButton("Return book");
 		btnReturnBook.setBounds(12, 700, 128, 27);
-		frame.getContentPane().add(btnReturnBook);
+		frmMilijanMosic.getContentPane().add(btnReturnBook);
 		
 		//
         LoadBooksIntoTable();
@@ -116,7 +117,6 @@ public class Library {
         String[] columnNames = {"Counter", "Name", "Email", "Phone Number"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         for (Object[] user : users) {
-	        System.out.println(user[3]);
             tableModel.addRow(user);
         }
         

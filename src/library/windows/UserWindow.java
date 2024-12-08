@@ -12,6 +12,7 @@ import library.models.User;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
 
 public class UserWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -19,6 +20,7 @@ public class UserWindow extends JFrame {
 	private JTextField nameTextField;
 	private JTextField emailTextField;
 	private JTextField phoneNumberTextField;
+	private JTextArea noteTextArea;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -34,7 +36,7 @@ public class UserWindow extends JFrame {
 	}
 
 	public UserWindow() {
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -74,13 +76,23 @@ public class UserWindow extends JFrame {
 		
 		//
 		
+		JLabel noteLabel = new JLabel("Note");
+		noteLabel.setBounds(12, 195, 60, 17);
+		contentPane.add(noteLabel);
+		
+		noteTextArea = new JTextArea();
+		noteTextArea.setBounds(12, 224, 256, 128);
+		contentPane.add(noteTextArea);
+		
+		//
+		
 		JButton closeButton = new JButton("Close");
-		closeButton.setBounds(12, 232, 106, 27);
+		closeButton.setBounds(12, 382, 106, 27);
 		closeButton.addActionListener(e -> dispose());
 		contentPane.add(closeButton);
 		
 		JButton confirmButton = new JButton("Insert");
-		confirmButton.setBounds(330, 232, 106, 27);
+		confirmButton.setBounds(330, 382, 106, 27);
 		confirmButton.addActionListener(e -> insertUserIntoDatabase());
 		contentPane.add(confirmButton);
 	}
@@ -89,13 +101,14 @@ public class UserWindow extends JFrame {
 	    String name = nameTextField.getText().trim();
 	    String email = emailTextField.getText().trim();
 	    String phoneNumber = phoneNumberTextField.getText().trim();
+	    String note = noteTextArea.getText().trim();
 
 	     if (name.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
-	        System.out.println("Please fill in all fields.");
+	        System.out.println("Please fill in all fields");
 	    } else {
-		    User.insertUser(name, email, phoneNumber);
+		    User.insertUser(name, email, phoneNumber, note);
 	        Library.LoadUsersIntoTable();
-		    System.out.println("User inserted successfully.");
+		    System.out.println("User inserted successfully");
 	        dispose();
 	    }
 	}

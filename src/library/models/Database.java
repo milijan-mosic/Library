@@ -50,7 +50,8 @@ public class Database {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 email TEXT NOT NULL,
-                phone_number TEXT
+                phone_number TEXT,
+                note TEXT
             );
         """;
 
@@ -81,9 +82,9 @@ public class Database {
     
     public static void insertDummyData() {
         String insertUsers = """
-            INSERT INTO users (id, name, email, phone_number) VALUES
-            ('1', 'Admin User', 'admin@example.com', '1234567890'),
-            ('2', 'Guest User', 'guest@example.com', '0987654321');
+            INSERT INTO users (id, name, email, phone_number, note) VALUES
+            ('1', 'Admin User', 'admin@example.com', '1234567890', ''),
+            ('2', 'Guest User', 'guest@example.com', '0987654321', '');
         """;
         
         String insertBooks = """
@@ -102,7 +103,7 @@ public class Database {
             stmtUsers.executeUpdate();
 
             closeConnection(conn);
-            System.out.println("Dummy data inserted successfully.");
+            System.out.println("Dummy data inserted successfully");
         } catch (SQLException e) {
             closeConnection(conn);
             e.printStackTrace();
@@ -130,10 +131,10 @@ public class Database {
     public static boolean checkTablesExistence(String[] tableNames) {
         for (String tableName : tableNames) {
             if (checkIfTableExists(tableName)) {
-                System.out.println("Table " + tableName + " already exists.");
+                System.out.println("Table " + tableName + " already exists");
                 return true;
             } else {
-                System.out.println("Table " + tableName + " does not exist.");
+                System.out.println("Table " + tableName + " does not exist");
             }
         }
         
