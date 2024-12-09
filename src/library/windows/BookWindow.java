@@ -29,6 +29,8 @@ public class BookWindow extends JFrame {
 	private JTextField authorTextField;
 	private JTextField phoneNumberTextField;
 	private JDatePickerImpl datePicker;
+	private JButton closeButton;
+	private JButton confirmButton;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -101,12 +103,12 @@ public class BookWindow extends JFrame {
 		
 		//
 		
-		JButton closeButton = new JButton("Close");
+		closeButton = new JButton("Close");
 		closeButton.setBounds(12, 382, 106, 27);
 		closeButton.addActionListener(e -> dispose());
 		contentPane.add(closeButton);
 		
-		JButton confirmButton = new JButton("Insert");
+		confirmButton = new JButton("Insert");
 		confirmButton.setBounds(330, 382, 106, 27);
 		confirmButton.addActionListener(e -> insertBookToDatabase());
 		contentPane.add(confirmButton);
@@ -130,7 +132,7 @@ public class BookWindow extends JFrame {
 	        System.out.println("All fields must be filled");
 	    } else {
 	        Book.insertBook(title, author, category, "1", releaseDate);
-	        Library.LoadBooksIntoTable();
+	        Library.LoadBooksIntoList();
 	        System.out.println("Book inserted successfully");
 	        dispose();
 	    }

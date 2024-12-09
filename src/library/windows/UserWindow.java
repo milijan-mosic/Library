@@ -21,6 +21,8 @@ public class UserWindow extends JFrame {
 	private JTextField emailTextField;
 	private JTextField phoneNumberTextField;
 	private JTextArea noteTextArea;
+	private JButton closeButton;
+	private JButton confirmButton;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -86,12 +88,12 @@ public class UserWindow extends JFrame {
 		
 		//
 		
-		JButton closeButton = new JButton("Close");
+		closeButton = new JButton("Close");
 		closeButton.setBounds(12, 382, 106, 27);
 		closeButton.addActionListener(e -> dispose());
 		contentPane.add(closeButton);
 		
-		JButton confirmButton = new JButton("Insert");
+		confirmButton = new JButton("Insert");
 		confirmButton.setBounds(330, 382, 106, 27);
 		confirmButton.addActionListener(e -> insertUserIntoDatabase());
 		contentPane.add(confirmButton);
@@ -107,7 +109,7 @@ public class UserWindow extends JFrame {
 	        System.out.println("Please fill in all fields");
 	    } else {
 		    User.insertUser(name, email, phoneNumber, note);
-	        Library.LoadUsersIntoTable();
+	        Library.LoadUsersIntoList();
 		    System.out.println("User inserted successfully");
 	        dispose();
 	    }
