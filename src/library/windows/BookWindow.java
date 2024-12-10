@@ -27,7 +27,7 @@ public class BookWindow extends JFrame {
 	private JPanel contentPane;
 	private JTextField titleTextField;
 	private JTextField authorTextField;
-	private JTextField phoneNumberTextField;
+	private JTextField categoryTextField;
 	private JDatePickerImpl datePicker;
 	private JButton closeButton;
 	private JButton confirmButton;
@@ -45,6 +45,19 @@ public class BookWindow extends JFrame {
 		});
 	}
 
+	public BookWindow(Book book) {
+        this();
+
+        titleTextField.setText(book.getTitle());
+        authorTextField.setText(book.getAuthor());
+        categoryTextField.setText(book.getCategory());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, book.getReleaseDate());
+        datePicker.getModel().setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePicker.getModel().setSelected(true);
+    }
+	
 	public BookWindow() {
 		setBounds(100, 100, 450, 450);
 		contentPane = new JPanel();
@@ -79,10 +92,10 @@ public class BookWindow extends JFrame {
 		phoneNumberLabel.setBounds(12, 134, 64, 16);
 		contentPane.add(phoneNumberLabel);
 		
-		phoneNumberTextField = new JTextField();
-		phoneNumberTextField.setColumns(10);
-		phoneNumberTextField.setBounds(12, 162, 164, 21);
-		contentPane.add(phoneNumberTextField);
+		categoryTextField = new JTextField();
+		categoryTextField.setColumns(10);
+		categoryTextField.setBounds(12, 162, 164, 21);
+		contentPane.add(categoryTextField);
 		
 		//
 
@@ -110,14 +123,20 @@ public class BookWindow extends JFrame {
 		
 		confirmButton = new JButton("Insert");
 		confirmButton.setBounds(330, 382, 106, 27);
-		confirmButton.addActionListener(e -> insertBookToDatabase());
+		confirmButton.addActionListener(e -> {
+			if (Library.bookForUpdating == null) {
+				insertBookToDatabase();
+			} else {
+				saveBookChanges();
+			}
+		});
 		contentPane.add(confirmButton);
 	}
 
 	private void insertBookToDatabase() {
 	    String title = titleTextField.getText();
 	    String author = authorTextField.getText();
-	    String category = phoneNumberTextField.getText();
+	    String category = categoryTextField.getText();
 
 	    Date selectedDate = (Date) datePicker.getModel().getValue();
 	    int releaseDate = 0;
@@ -134,6 +153,33 @@ public class BookWindow extends JFrame {
 	        Book.insertBook(title, author, category, "1", releaseDate);
 	        Library.LoadBooksIntoList();
 	        System.out.println("Book inserted successfully");
+	        dispose();
+	    }
+	}
+
+	private void saveBookChanges() {
+		String updatedTitle = titleTextField.getText();
+		String updatedAuthor = authorTextField.getText();
+		String updatedCategory = categoryTextField.getText();
+	
+		Date selectedDate = (Date) datePicker.getModel().getValue();
+	    int releaseDate = 0;
+	
+	    if (selectedDate != null) {
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(selectedDate);
+	        releaseDate = calendar.get(Calendar.YEAR);
+	    }
+
+		Book originalBook = Library.bookForUpdating;
+	
+		if (updatedTitle.isEmpty() || updatedAuthor.isEmpty() || updatedCategory.isEmpty()) {
+	        System.out.println("All fields must be filled");
+	    } else {
+			Book.updateBook(Integer.parseInt(originalBook.getId()), updatedTitle, updatedAuthor, updatedCategory, originalBook.getOwnerId(), releaseDate);
+			Library.bookForUpdating = null;
+	        Library.LoadBooksIntoList();
+	        System.out.println("Book updated successfully");
 	        dispose();
 	    }
 	}

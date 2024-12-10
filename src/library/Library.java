@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 
 import library.models.Book;
 import library.models.Database;
@@ -30,6 +29,8 @@ public class Library {
     //
     private JTable transactionTable;
     private JButton btnReturnBook;
+    //
+    public static Book bookForUpdating;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -75,7 +76,6 @@ public class Library {
         bookList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                // Check if an item is selected
                 boolean isSelected = !bookList.isSelectionEmpty();
                 btnEditBook.setEnabled(isSelected);
                 btnDeleteBook.setEnabled(isSelected);
@@ -92,12 +92,18 @@ public class Library {
     
         btnEditBook = new JButton("Edit book");
         btnEditBook.setBounds(152, 381, 106, 27);
-        btnEditBook.setEnabled(false);  // Initially disabled
+        btnEditBook.setEnabled(false);
+        btnEditBook.addActionListener(e -> {
+            Book selectedBook = getSelectedBook();
+            if (selectedBook != null) {
+                WindowUtils.openWindowWithButtonControl(btnEditBook, new BookWindow(selectedBook));
+            }
+        });
         frame.getContentPane().add(btnEditBook);
     
         btnDeleteBook = new JButton("Delete book");
         btnDeleteBook.setBounds(270, 381, 118, 27);
-        btnDeleteBook.setEnabled(false);  // Initially disabled
+        btnDeleteBook.setEnabled(false);
         frame.getContentPane().add(btnDeleteBook);
     
         // USERS
@@ -107,7 +113,6 @@ public class Library {
         userList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                // Check if an item is selected
                 boolean isSelected = !userList.isSelectionEmpty();
                 btnEditUser.setEnabled(isSelected);
                 btnDeleteUser.setEnabled(isSelected);
@@ -124,12 +129,12 @@ public class Library {
     
         btnEditUser = new JButton("Edit user");
         btnEditUser.setBounds(656, 381, 106, 27);
-        btnEditUser.setEnabled(false);  // Initially disabled
+        btnEditUser.setEnabled(false);
         frame.getContentPane().add(btnEditUser);
     
         btnDeleteUser = new JButton("Delete user");
         btnDeleteUser.setBounds(774, 381, 106, 27);
-        btnDeleteUser.setEnabled(false);  // Initially disabled
+        btnDeleteUser.setEnabled(false);
         frame.getContentPane().add(btnDeleteUser);
     
         // TRANSACTIONS
@@ -172,4 +177,11 @@ public class Library {
 
         userList.setModel(listModel);
     }
+
+    public Book getSelectedBook() {
+        int selectedIndex = bookList.getSelectedIndex();
+
+        bookForUpdating = Book.getSelectedBook(selectedIndex + 1);
+        return bookForUpdating;
+    }   
 }

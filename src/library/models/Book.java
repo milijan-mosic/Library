@@ -109,16 +109,18 @@ public class Book {
                 books.add(book);            }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
         }
 
-        Database.closeConnection(conn);
         return books;
     }
 
-    private Book getSelectedBook(int id) {
+    public static Book getSelectedBook(int id) {
         String query = "SELECT * FROM books WHERE id = ?";
-        Connection conn = Database.getConnection();
         Book selectedBook = null;
+        
+        Connection conn = Database.getConnection();
         
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -159,26 +161,30 @@ public class Book {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
         }
     }
 
-    public static void updateBook(String id, String title, String author, String category, String ownerId, int releaseDate) {
+    public static void updateBook(int id, String title, String author, String category, String ownerId, int releaseDate) {
         String query = "UPDATE books SET title = ?, author = ?, category = ?, release_date = ? WHERE id = ? AND owner_id = ?";
     
         Connection conn = Database.getConnection();
-        
+    
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
-
-            stmt.setString(1, id);
-            stmt.setString(2, title);
-            stmt.setString(3, author);
-            stmt.setString(4, category);
-            stmt.setString(5, ownerId);
-            stmt.setInt(6, releaseDate);
+    
+            stmt.setString(1, title);
+            stmt.setString(2, author);
+            stmt.setString(3, category);
+            stmt.setInt(4, releaseDate);
+            stmt.setInt(5, id);
+            stmt.setString(6, ownerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
         }
     }
 }
