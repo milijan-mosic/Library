@@ -108,8 +108,7 @@ public class Library {
         btnDeleteBook.addActionListener(e -> {
             int selectedIndex = bookList.getSelectedIndex() + 1;
 
-            Book.deleteBook(selectedIndex);
-            LoadBooksIntoList();
+            Library.showDeleteDialog(selectedIndex, "book");
         });
         frame.getContentPane().add(btnDeleteBook);
     
@@ -151,8 +150,7 @@ public class Library {
         btnDeleteUser.addActionListener(e -> {
             int selectedIndex = userList.getSelectedIndex() + 1;
 
-            User.deleteUser(selectedIndex);
-            LoadUsersIntoList();
+            Library.showDeleteDialog(selectedIndex, "user");
         });
         frame.getContentPane().add(btnDeleteUser);
     
@@ -207,5 +205,23 @@ public class Library {
         int selectedIndex = userList.getSelectedIndex() + 1;
 
         userForUpdating = User.getUser(selectedIndex);
+    }
+
+    public static void showDeleteDialog(int itemId, String itemType) {
+        int option = JOptionPane.showConfirmDialog(null,
+                "Are you sure you want to delete this " + itemType + "?",
+                "Delete " + itemType,
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.WARNING_MESSAGE);
+        
+        if (option == JOptionPane.YES_OPTION) {
+            if (itemType == "user") {
+                User.deleteUser(itemId);
+                LoadUsersIntoList();
+            } else {
+                Book.deleteBook(itemId);
+                LoadBooksIntoList();
+            }
+        }
     }
 }
