@@ -95,9 +95,9 @@ public class Library {
         btnEditBook.setBounds(152, 381, 106, 27);
         btnEditBook.setEnabled(false);
         btnEditBook.addActionListener(e -> {
-            Book selectedBook = getSelectedBook();
-            if (selectedBook != null) {
-                WindowUtils.openWindowWithButtonControl(btnEditBook, new BookWindow(selectedBook));
+            getSelectedBook();
+            if (bookForUpdating != null) {
+                WindowUtils.openWindowWithButtonControl(btnEditBook, new BookWindow(bookForUpdating));
             }
         });
         frame.getContentPane().add(btnEditBook);
@@ -105,6 +105,12 @@ public class Library {
         btnDeleteBook = new JButton("Delete book");
         btnDeleteBook.setBounds(270, 381, 118, 27);
         btnDeleteBook.setEnabled(false);
+        btnDeleteBook.addActionListener(e -> {
+            int selectedIndex = bookList.getSelectedIndex() + 1;
+
+            Book.deleteBook(selectedIndex);
+            LoadBooksIntoList();
+        });
         frame.getContentPane().add(btnDeleteBook);
     
         // USERS
@@ -132,9 +138,9 @@ public class Library {
         btnEditUser.setBounds(656, 381, 106, 27);
         btnEditUser.setEnabled(false);
         btnEditUser.addActionListener(e -> {
-            User selectedUser = getSelectedUser();
-            if (selectedUser != null) {
-                WindowUtils.openWindowWithButtonControl(btnEditUser, new UserWindow(selectedUser));
+            getSelectedUser();
+            if (userForUpdating != null) {
+                WindowUtils.openWindowWithButtonControl(btnEditUser, new UserWindow(userForUpdating));
             }
         });
         frame.getContentPane().add(btnEditUser);
@@ -142,6 +148,12 @@ public class Library {
         btnDeleteUser = new JButton("Delete user");
         btnDeleteUser.setBounds(774, 381, 106, 27);
         btnDeleteUser.setEnabled(false);
+        btnDeleteUser.addActionListener(e -> {
+            int selectedIndex = userList.getSelectedIndex() + 1;
+
+            User.deleteUser(selectedIndex);
+            LoadUsersIntoList();
+        });
         frame.getContentPane().add(btnDeleteUser);
     
         // TRANSACTIONS
@@ -185,17 +197,15 @@ public class Library {
         userList.setModel(listModel);
     }
 
-    public Book getSelectedBook() {
-        int selectedIndex = bookList.getSelectedIndex();
+    public void getSelectedBook() {
+        int selectedIndex = bookList.getSelectedIndex() + 1;
 
-        bookForUpdating = Book.getBook(selectedIndex + 1);
-        return bookForUpdating;
+        bookForUpdating = Book.getBook(selectedIndex);
     }
 
-    public User getSelectedUser() {
-        int selectedIndex = userList.getSelectedIndex();
+    public void getSelectedUser() {
+        int selectedIndex = userList.getSelectedIndex() + 1;
 
-        userForUpdating = User.getUser(selectedIndex + 1);
-        return userForUpdating;
+        userForUpdating = User.getUser(selectedIndex);
     }
 }

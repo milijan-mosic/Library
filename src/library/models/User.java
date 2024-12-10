@@ -112,13 +112,12 @@ public class User {
             ResultSet rs = stmt.executeQuery();
     
             if (rs.next()) {
-                String userId = rs.getString("id");
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String phoneNumber = rs.getString("phone_number");
                 String note = rs.getString("note");
     
-                selectedUser = new User(userId, name, email, phoneNumber, note);
+                selectedUser = new User(Integer.toString(id), name, email, phoneNumber, note);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -163,6 +162,29 @@ public class User {
             stmt.setString(4, note);
             stmt.setInt(5, id);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
+        }
+    }
+
+    public static void deleteUser(int id) {
+        String query = "DELETE FROM users WHERE id = ?";
+        
+        Connection conn = Database.getConnection();
+        
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, id);
+            
+            int rowsAffected = stmt.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                System.out.println("User deleted successfully");
+            } else {
+                System.out.println("User not found or already deleted");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

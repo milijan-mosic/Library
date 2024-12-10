@@ -184,4 +184,27 @@ public class Book {
             Database.closeConnection(conn);
         }
     }
+
+    public static void deleteBook(int id) {
+        String query = "DELETE FROM books WHERE id = ?";
+        
+        Connection conn = Database.getConnection();
+        
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, id);
+            
+            int rowsAffected = stmt.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                System.out.println("Book deleted successfully");
+            } else {
+                System.out.println("Book not found or already deleted");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
+        }
+    }
 }
