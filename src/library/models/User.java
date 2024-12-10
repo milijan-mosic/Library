@@ -135,8 +135,8 @@ public class User {
         Connection conn = Database.getConnection();
         
         try {
-        	PreparedStatement stmt = conn.prepareStatement(query);
-        	
+            PreparedStatement stmt = conn.prepareStatement(query);
+            
             stmt.setString(1, name);
             stmt.setString(2, email);
             stmt.setString(3, phoneNumber);

@@ -148,7 +148,7 @@ public class Book {
         Connection conn = Database.getConnection();
         
         try {
-        	PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt = conn.prepareStatement(query);
             
             stmt.setString(1, title);
             stmt.setString(2, author);

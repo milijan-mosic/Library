@@ -28,7 +28,7 @@ public class Database {
                 connection.close();
             }
         } catch (Exception e) {
-	        System.out.println("Failed to close the connection");
+            System.out.println("Failed to close the connection");
             e.printStackTrace();
         }
     }
@@ -69,7 +69,7 @@ public class Database {
 
         Connection conn = Database.getConnection();
         try {
-        	Statement stmt = conn.createStatement();
+            Statement stmt = conn.createStatement();
             stmt.execute(createBooksTable);
             stmt.execute(createUsersTable);
             stmt.execute(createTransactionsTable);
@@ -98,7 +98,7 @@ public class Database {
         try {
             PreparedStatement stmtBooks = conn.prepareStatement(insertBooks);
             PreparedStatement stmtUsers = conn.prepareStatement(insertUsers);
-            		
+                    
             stmtBooks.executeUpdate();
             stmtUsers.executeUpdate();
 
@@ -115,7 +115,7 @@ public class Database {
         Connection conn = Database.getConnection();
         
         try {
-        	PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, tableName);
             ResultSet rs = stmt.executeQuery();
 
@@ -159,7 +159,7 @@ public class Database {
             closeConnection(conn);
             return booksCount > 0 && usersCount > 0;
         } catch (SQLException e) {
-        	closeConnection(conn);
+            closeConnection(conn);
             e.printStackTrace();
             return false;
         }
