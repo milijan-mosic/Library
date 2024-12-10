@@ -139,7 +139,7 @@ public class BookWindow extends JFrame {
             releaseDate = calendar.get(Calendar.YEAR);
         }
 
-        if (title.isEmpty() || author.isEmpty() || category.isEmpty()) {
+        if (title.isEmpty() || author.isEmpty() || category.isEmpty() || releaseDate == 0) {
             System.out.println("All fields must be filled");
         } else {
             Book.insertBook(title, author, category, "1", releaseDate);
@@ -165,7 +165,7 @@ public class BookWindow extends JFrame {
 
         Book originalBook = Library.bookForUpdating;
     
-        if (updatedTitle.isEmpty() || updatedAuthor.isEmpty() || updatedCategory.isEmpty()) {
+        if (updatedTitle.isEmpty() || updatedAuthor.isEmpty() || updatedCategory.isEmpty() || releaseDate == 0) {
             System.out.println("All fields must be filled");
         } else {
             Book.updateBook(Integer.parseInt(originalBook.getId()), updatedTitle, updatedAuthor, updatedCategory, originalBook.getOwnerId(), releaseDate);
