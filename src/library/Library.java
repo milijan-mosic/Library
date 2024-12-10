@@ -72,9 +72,13 @@ public class Library {
         frame.setResizable(false);
         
         // ---------------------------------------------------------------- *** ----------------------------------------------------------------
+        
+        JLabel lblBooks = new JLabel("BOOKS");
+        lblBooks.setBounds(12, 12, 60, 17);
+        frame.getContentPane().add(lblBooks);
 
         bookList = new JList<>();
-        bookList.setBounds(12, 12, 492, 357);
+        bookList.setBounds(12, 41, 492, 328);
         bookList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         bookList.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -116,8 +120,12 @@ public class Library {
     
         // ---------------------------------------------------------------- *** ----------------------------------------------------------------
 
+        JLabel lblUsers = new JLabel("USERS");
+        lblUsers.setBounds(516, 12, 60, 17);
+        frame.getContentPane().add(lblUsers);
+
         userList = new JList<>();
-        userList.setBounds(516, 12, 492, 357);
+        userList.setBounds(516, 41, 492, 328);
         userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         userList.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -159,9 +167,13 @@ public class Library {
     
         // ---------------------------------------------------------------- *** ----------------------------------------------------------------
 
+        JLabel lblTransactions = new JLabel("TRANSACTIONS");
+        lblTransactions.setBounds(12, 420, 106, 17);
+        frame.getContentPane().add(lblTransactions);
+
         transactionTable = new JTable();
         transactionTable.setEnabled(false);
-        transactionTable.setBounds(12, 420, 996, 268);
+        transactionTable.setBounds(12, 449, 996, 239);
         frame.getContentPane().add(transactionTable);
     
         btnReturnBook = new JButton("Return book");
