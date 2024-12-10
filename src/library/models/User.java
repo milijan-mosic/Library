@@ -15,7 +15,6 @@ public class User {
     private String phone_number;
     private String note;
 
-    // Constructor
     public User(String id, String name, String email, String phone_number, String note) {
         this.id = id;
         this.name = name;
@@ -24,7 +23,6 @@ public class User {
         this.note = note;
     }
 
-    // Getters
     public String getId() {
         return id;
     }
@@ -45,7 +43,6 @@ public class User {
         return note;
     }
 
-    // Setters
     public void setId(String id) {
         this.id = id;
     }
@@ -103,6 +100,35 @@ public class User {
         return users;
     }
     
+    public static User getUser(int id) {
+        String query = "SELECT * FROM users WHERE id = ?";
+        User selectedUser = null;
+    
+        Connection conn = Database.getConnection();
+    
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                String userId = rs.getString("id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phone_number");
+                String note = rs.getString("note");
+    
+                selectedUser = new User(userId, name, email, phoneNumber, note);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
+        }
+    
+        return selectedUser;
+    }
+    
     public static void insertUser(String name, String email, String phoneNumber, String note) {
         String query = "INSERT INTO users (name, email, phone_number, note) VALUES (?, ?, ?, ?)";
         
@@ -115,6 +141,27 @@ public class User {
             stmt.setString(2, email);
             stmt.setString(3, phoneNumber);
             stmt.setString(4, note);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
+        }
+    }
+
+    public static void updateUser(int id, String name, String email, String phoneNumber, String note) {
+        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, note = ? WHERE id = ?";
+    
+        Connection conn = Database.getConnection();
+    
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+    
+            stmt.setString(1, name);
+            stmt.setString(2, email);
+            stmt.setString(3, phoneNumber);
+            stmt.setString(4, note);
+            stmt.setInt(5, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

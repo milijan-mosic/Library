@@ -31,6 +31,7 @@ public class Library {
     private JButton btnReturnBook;
     //
     public static Book bookForUpdating;
+    public static User userForUpdating;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -130,6 +131,12 @@ public class Library {
         btnEditUser = new JButton("Edit user");
         btnEditUser.setBounds(656, 381, 106, 27);
         btnEditUser.setEnabled(false);
+        btnEditUser.addActionListener(e -> {
+            User selectedUser = getSelectedUser();
+            if (selectedUser != null) {
+                WindowUtils.openWindowWithButtonControl(btnEditUser, new UserWindow(selectedUser));
+            }
+        });
         frame.getContentPane().add(btnEditUser);
     
         btnDeleteUser = new JButton("Delete user");
@@ -181,7 +188,14 @@ public class Library {
     public Book getSelectedBook() {
         int selectedIndex = bookList.getSelectedIndex();
 
-        bookForUpdating = Book.getSelectedBook(selectedIndex + 1);
+        bookForUpdating = Book.getBook(selectedIndex + 1);
         return bookForUpdating;
-    }   
+    }
+
+    public User getSelectedUser() {
+        int selectedIndex = userList.getSelectedIndex();
+
+        userForUpdating = User.getUser(selectedIndex + 1);
+        return userForUpdating;
+    }
 }

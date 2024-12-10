@@ -15,7 +15,6 @@ public class Book {
     private String ownerId;
     private int releaseDate;
 
-    // Constructor
     public Book(String id, String title, String author, String category, String ownerId, int releaseDate) {
         this.id = id;
         this.title = title;
@@ -25,7 +24,6 @@ public class Book {
         this.releaseDate = releaseDate;
     }
 
-    // Getters
     public String getId() {
         return id;
     }
@@ -50,7 +48,6 @@ public class Book {
         return releaseDate;
     }
 
-    // Setters
     public void setId(String id) {
         this.id = id;
     }
@@ -116,7 +113,7 @@ public class Book {
         return books;
     }
 
-    public static Book getSelectedBook(int id) {
+    public static Book getBook(int id) {
         String query = "SELECT * FROM books WHERE id = ?";
         Book selectedBook = null;
         

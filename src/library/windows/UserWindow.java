@@ -37,6 +37,15 @@ public class UserWindow extends JFrame {
 		});
 	}
 
+	public UserWindow(User user) {
+        this();
+
+        nameTextField.setText(user.getName());
+        emailTextField.setText(user.getEmail());
+        phoneNumberTextField.setText(user.getPhoneNumber());
+        noteTextArea.setText(user.getNote());
+    }
+
 	public UserWindow() {
 		setBounds(100, 100, 450, 450);
 		contentPane = new JPanel();
@@ -93,9 +102,15 @@ public class UserWindow extends JFrame {
 		closeButton.addActionListener(e -> dispose());
 		contentPane.add(closeButton);
 		
-		confirmButton = new JButton("Insert");
+		confirmButton = new JButton("Confirm");
 		confirmButton.setBounds(330, 382, 106, 27);
-		confirmButton.addActionListener(e -> insertUserIntoDatabase());
+		confirmButton.addActionListener(e -> {
+			if (Library.userForUpdating == null) {
+				insertUserIntoDatabase();
+			} else {
+				saveUserChanges();
+			}
+		});
 		contentPane.add(confirmButton);
 	}
 	
@@ -111,6 +126,25 @@ public class UserWindow extends JFrame {
 		    User.insertUser(name, email, phoneNumber, note);
 	        Library.LoadUsersIntoList();
 		    System.out.println("User inserted successfully");
+	        dispose();
+	    }
+	}
+
+	private void saveUserChanges() {
+		String updatedName = nameTextField.getText();
+		String updatedEmail = emailTextField.getText();
+		String updatedPhoneNumber = phoneNumberTextField.getText();
+		String updatedNote = noteTextArea.getText();
+
+		User originalUser = Library.userForUpdating;
+	
+		if (updatedName.isEmpty() || updatedEmail.isEmpty() || updatedPhoneNumber.isEmpty()) {
+	        System.out.println("All fields must be filled");
+	    } else {
+			User.updateUser(Integer.parseInt(originalUser.getId()), updatedName, updatedEmail, updatedPhoneNumber, updatedNote);
+			Library.userForUpdating = null;
+	        Library.LoadUsersIntoList();
+	        System.out.println("User updated successfully");
 	        dispose();
 	    }
 	}

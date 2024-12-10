@@ -121,7 +121,7 @@ public class BookWindow extends JFrame {
 		closeButton.addActionListener(e -> dispose());
 		contentPane.add(closeButton);
 		
-		confirmButton = new JButton("Insert");
+		confirmButton = new JButton("Confirm");
 		confirmButton.setBounds(330, 382, 106, 27);
 		confirmButton.addActionListener(e -> {
 			if (Library.bookForUpdating == null) {
