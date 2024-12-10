@@ -114,6 +114,34 @@ public class Book {
         Database.closeConnection(conn);
         return books;
     }
+
+    private Book getSelectedBook(int id) {
+        String query = "SELECT * FROM books WHERE id = ?";
+        Connection conn = Database.getConnection();
+        Book selectedBook = null;
+        
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                String category = rs.getString("category");
+                String ownerId = rs.getString("owner_id");
+                int releaseDate = Integer.parseInt(rs.getString("release_date"));
+                
+                selectedBook = new Book(Integer.toString(id), title, author, category, ownerId, releaseDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
+        }
+        
+        return selectedBook;
+    }
     
     public static void insertBook(String title, String author, String category, String ownerId, int releaseDate) {
         String query = "INSERT INTO books (title, author, category, owner_id, release_date) VALUES (?, ?, ?, ?, ?)";
@@ -128,6 +156,26 @@ public class Book {
             stmt.setString(3, category);
             stmt.setString(4, ownerId);
             stmt.setInt(5, releaseDate);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateBook(String id, String title, String author, String category, String ownerId, int releaseDate) {
+        String query = "UPDATE books SET title = ?, author = ?, category = ?, release_date = ? WHERE id = ? AND owner_id = ?";
+    
+        Connection conn = Database.getConnection();
+        
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            stmt.setString(1, id);
+            stmt.setString(2, title);
+            stmt.setString(3, author);
+            stmt.setString(4, category);
+            stmt.setString(5, ownerId);
+            stmt.setInt(6, releaseDate);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
