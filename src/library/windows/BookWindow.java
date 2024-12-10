@@ -75,8 +75,6 @@ public class BookWindow extends JFrame {
         contentPane.add(titleTextField);
         titleTextField.setColumns(10);
         
-        //
-        
         JLabel authorLabel = new JLabel("Author");
         authorLabel.setBounds(12, 73, 64, 16);
         contentPane.add(authorLabel);
@@ -86,8 +84,6 @@ public class BookWindow extends JFrame {
         authorTextField.setBounds(12, 101, 164, 21);
         contentPane.add(authorTextField);
         
-        //
-        
         JLabel phoneNumberLabel = new JLabel("Category");
         phoneNumberLabel.setBounds(12, 134, 64, 16);
         contentPane.add(phoneNumberLabel);
@@ -96,8 +92,6 @@ public class BookWindow extends JFrame {
         categoryTextField.setColumns(10);
         categoryTextField.setBounds(12, 162, 164, 21);
         contentPane.add(categoryTextField);
-        
-        //
 
         JLabel releaseDateLabel = new JLabel("Release date");
         releaseDateLabel.setBounds(12, 195, 81, 16);
@@ -113,8 +107,6 @@ public class BookWindow extends JFrame {
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         datePicker.setBounds(12, 223, 164, 27);
         contentPane.add(datePicker);
-        
-        //
         
         closeButton = new JButton("Close");
         closeButton.setBounds(12, 382, 106, 27);

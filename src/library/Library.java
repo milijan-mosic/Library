@@ -70,7 +70,8 @@ public class Library {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
     
-        // BOOKS
+        // ---------------------------------------------------------------- *** ----------------------------------------------------------------
+
         bookList = new JList<>();
         bookList.setBounds(12, 12, 492, 357);
         bookList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -112,7 +113,8 @@ public class Library {
         });
         frame.getContentPane().add(btnDeleteBook);
     
-        // USERS
+        // ---------------------------------------------------------------- *** ----------------------------------------------------------------
+---
         userList = new JList<>();
         userList.setBounds(516, 12, 492, 357);
         userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -154,7 +156,8 @@ public class Library {
         });
         frame.getContentPane().add(btnDeleteUser);
     
-        // TRANSACTIONS
+        // ---------------------------------------------------------------- *** ----------------------------------------------------------------
+
         transactionTable = new JTable();
         transactionTable.setEnabled(false);
         transactionTable.setBounds(12, 420, 996, 268);
@@ -164,7 +167,6 @@ public class Library {
         btnReturnBook.setBounds(12, 700, 128, 27);
         frame.getContentPane().add(btnReturnBook);
     
-        // Load data into lists
         LoadBooksIntoList();
         LoadUsersIntoList();
     }

@@ -62,9 +62,7 @@ public class UserWindow extends JFrame {
         nameTextField.setBounds(12, 40, 164, 21);
         contentPane.add(nameTextField);
         nameTextField.setColumns(10);
-        
-        //
-        
+
         JLabel emailLabel = new JLabel("Email");
         emailLabel.setBounds(12, 73, 64, 16);
         contentPane.add(emailLabel);
@@ -73,9 +71,7 @@ public class UserWindow extends JFrame {
         emailTextField.setColumns(10);
         emailTextField.setBounds(12, 101, 256, 21);
         contentPane.add(emailTextField);
-        
-        //
-        
+
         JLabel phoneNumberLabel = new JLabel("Phone Number");
         phoneNumberLabel.setBounds(12, 134, 106, 16);
         contentPane.add(phoneNumberLabel);
@@ -84,9 +80,7 @@ public class UserWindow extends JFrame {
         phoneNumberTextField.setColumns(10);
         phoneNumberTextField.setBounds(12, 162, 164, 21);
         contentPane.add(phoneNumberTextField);
-        
-        //
-        
+
         JLabel noteLabel = new JLabel("Note");
         noteLabel.setBounds(12, 195, 60, 17);
         contentPane.add(noteLabel);
@@ -94,9 +88,7 @@ public class UserWindow extends JFrame {
         noteTextArea = new JTextArea();
         noteTextArea.setBounds(12, 224, 256, 128);
         contentPane.add(noteTextArea);
-        
-        //
-        
+
         closeButton = new JButton("Close");
         closeButton.setBounds(12, 382, 106, 27);
         closeButton.addActionListener(e -> dispose());

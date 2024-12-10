@@ -7,7 +7,6 @@ public class Transaction {
     private int lentDate;
     private int returnDate;
 
-    // Constructor
     public Transaction(String id, String bookId, String ownerId, int lentDate, int returnDate) {
         this.id = id;
         this.bookId = bookId;
@@ -16,7 +15,6 @@ public class Transaction {
         this.returnDate = returnDate;
     }
 
-    // Getters
     public String getId() {
         return id;
     }
@@ -37,7 +35,6 @@ public class Transaction {
         return returnDate;
     }
 
-    // Setters
     public void setId(String id) {
         this.id = id;
     }
