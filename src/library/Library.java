@@ -69,7 +69,8 @@ public class Library {
         frame.setBounds(100, 100, 1024, 768);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
-    
+        frame.setResizable(false);
+        
         // ---------------------------------------------------------------- *** ----------------------------------------------------------------
 
         bookList = new JList<>();
@@ -114,7 +115,7 @@ public class Library {
         frame.getContentPane().add(btnDeleteBook);
     
         // ---------------------------------------------------------------- *** ----------------------------------------------------------------
-        
+
         userList = new JList<>();
         userList.setBounds(516, 12, 492, 357);
         userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
