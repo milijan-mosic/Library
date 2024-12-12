@@ -12,17 +12,21 @@ import library.models.Database;
 import library.models.User;
 import library.utils.WindowUtils;
 import library.windows.BookWindow;
+import library.windows.LendingBookWindow;
 import library.windows.UserWindow;
 
 public class Library {
     private JFrame frame;
     //
     private static JList<String> bookList;
+    private static List<Object[]> books;
     private JButton btnAddBook;
     private JButton btnEditBook;
     private JButton btnDeleteBook;
+    private JButton btnLendBook;
     //
     private static JList<String> userList;
+    private static List<Object[]> users;
     private JButton btnAddUser;
     private JButton btnEditUser;
     private JButton btnDeleteUser;
@@ -84,8 +88,10 @@ public class Library {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 boolean isSelected = !bookList.isSelectionEmpty();
+
                 btnEditBook.setEnabled(isSelected);
                 btnDeleteBook.setEnabled(isSelected);
+                btnLendBook.setEnabled(isSelected);
             }
         });
         frame.getContentPane().add(bookList);
@@ -98,7 +104,7 @@ public class Library {
         frame.getContentPane().add(btnAddBook);
     
         btnEditBook = new JButton("Edit book");
-        btnEditBook.setBounds(152, 381, 106, 27);
+        btnEditBook.setBounds(152, 381, 92, 27);
         btnEditBook.setEnabled(false);
         btnEditBook.addActionListener(e -> {
             getSelectedBook();
@@ -109,7 +115,7 @@ public class Library {
         frame.getContentPane().add(btnEditBook);
     
         btnDeleteBook = new JButton("Delete book");
-        btnDeleteBook.setBounds(270, 381, 118, 27);
+        btnDeleteBook.setBounds(256, 381, 118, 27);
         btnDeleteBook.setEnabled(false);
         btnDeleteBook.addActionListener(e -> {
             int selectedIndex = bookList.getSelectedIndex() + 1;
@@ -117,6 +123,25 @@ public class Library {
             Library.showDeleteDialog(selectedIndex, "book");
         });
         frame.getContentPane().add(btnDeleteBook);
+
+        btnLendBook = new JButton("Lend book");
+        btnLendBook.setBounds(386, 381, 118, 27);
+        btnLendBook.setEnabled(false);
+        btnLendBook.addActionListener(e -> {
+            int selectedBookIndex = bookList.getSelectedIndex();
+
+            if (selectedBookIndex != -1) {
+                String selectedBookInfo = bookList.getModel().getElementAt(selectedBookIndex);
+                String selectedBookName = selectedBookInfo.split(" - ")[0];
+                List<String> userNames = users.stream().map(user -> (String) user[1]).toList();
+
+                WindowUtils.openWindowWithButtonControl(btnLendBook, new LendingBookWindow(selectedBookName, userNames));
+            } else {
+                JOptionPane.showMessageDialog(frame, "Please select a book to lend.", "No Book Selected", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        
+        frame.getContentPane().add(btnLendBook);
     
         // ---------------------------------------------------------------- *** ----------------------------------------------------------------
 
@@ -138,14 +163,14 @@ public class Library {
         frame.getContentPane().add(userList);
     
         btnAddUser = new JButton("Add user");
-        btnAddUser.setBounds(516, 381, 128, 27);
+        btnAddUser.setBounds(644, 381, 128, 27);
         btnAddUser.addActionListener(e -> {
             WindowUtils.openWindowWithButtonControl(btnAddUser, new UserWindow());
         });
         frame.getContentPane().add(btnAddUser);
     
         btnEditUser = new JButton("Edit user");
-        btnEditUser.setBounds(656, 381, 106, 27);
+        btnEditUser.setBounds(784, 381, 106, 27);
         btnEditUser.setEnabled(false);
         btnEditUser.addActionListener(e -> {
             getSelectedUser();
@@ -156,7 +181,7 @@ public class Library {
         frame.getContentPane().add(btnEditUser);
     
         btnDeleteUser = new JButton("Delete user");
-        btnDeleteUser.setBounds(774, 381, 106, 27);
+        btnDeleteUser.setBounds(902, 381, 106, 27);
         btnDeleteUser.setEnabled(false);
         btnDeleteUser.addActionListener(e -> {
             int selectedIndex = userList.getSelectedIndex() + 1;
@@ -178,6 +203,7 @@ public class Library {
     
         btnReturnBook = new JButton("Return book");
         btnReturnBook.setBounds(12, 700, 128, 27);
+        btnReturnBook.setEnabled(false);
         frame.getContentPane().add(btnReturnBook);
     
         LoadBooksIntoList();
@@ -185,7 +211,7 @@ public class Library {
     }
 
     public static void LoadBooksIntoList() {
-        List<Object[]> books = Book.getAllBooks();
+        books = Book.getAllBooks();
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
@@ -198,7 +224,7 @@ public class Library {
     }
 
     public static void LoadUsersIntoList() {
-        List<Object[]> users = User.getAllUsers();
+        users = User.getAllUsers();
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
