@@ -1,6 +1,9 @@
 package library;
 
 import java.awt.EventQueue;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.*;
@@ -9,6 +12,7 @@ import javax.swing.event.ListSelectionListener;
 
 import library.models.Book;
 import library.models.Database;
+import library.models.Transaction;
 import library.models.User;
 import library.utils.WindowUtils;
 import library.windows.BookWindow;
@@ -31,7 +35,7 @@ public class Library {
     private JButton btnEditUser;
     private JButton btnDeleteUser;
     //
-    private JTable transactionTable;
+    private static JList<String> transactionList;
     private JButton btnReturnBook;
     //
     public static Book bookForUpdating;
@@ -196,10 +200,17 @@ public class Library {
         lblTransactions.setBounds(12, 420, 106, 17);
         frame.getContentPane().add(lblTransactions);
 
-        transactionTable = new JTable();
-        transactionTable.setEnabled(false);
-        transactionTable.setBounds(12, 449, 996, 239);
-        frame.getContentPane().add(transactionTable);
+        transactionList = new JList<>();
+        transactionList.setBounds(12, 449, 996, 239);
+        transactionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        transactionList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                boolean isSelected = !transactionList.isSelectionEmpty();
+                btnReturnBook.setEnabled(isSelected);
+            }
+        });
+        frame.getContentPane().add(transactionList);
     
         btnReturnBook = new JButton("Return book");
         btnReturnBook.setBounds(12, 700, 128, 27);
@@ -208,6 +219,7 @@ public class Library {
     
         LoadBooksIntoList();
         LoadUsersIntoList();
+        LoadTransactionsIntoList();
     }
 
     public static void LoadBooksIntoList() {
@@ -234,6 +246,30 @@ public class Library {
         }
 
         userList.setModel(listModel);
+    }
+
+    public static void LoadTransactionsIntoList() {
+        List<Object[]> transactions = Transaction.getAllTransactions();
+    
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+    
+        for (Object[] transaction : transactions) {
+            int lentDateStr = (int) transaction[3];
+            String finalLentDate = convertUnixTimestampToSerbianFormat(lentDateStr);
+    
+            int returnDate = (int) transaction[4];
+            String finalReturnDate = "";
+            if (returnDate != 0) {
+                finalReturnDate = convertUnixTimestampToSerbianFormat(returnDate);
+            } else {
+                finalReturnDate = "Nije vracena...";
+            }
+    
+            String transactionInfo = String.format("%s -> %s | Izdata: %s, Status: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
+            listModel.addElement(transactionInfo);
+        }
+    
+        transactionList.setModel(listModel);
     }
 
     public void getSelectedBook() {
@@ -264,5 +300,13 @@ public class Library {
                 LoadBooksIntoList();
             }
         }
+    }
+    
+    public static String convertUnixTimestampToSerbianFormat(int timestamp) {
+        Instant instant = Instant.ofEpochSecond(timestamp);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZoneId.of("Europe/Belgrade"));
+
+        return formatter.format(instant);
     }
 }

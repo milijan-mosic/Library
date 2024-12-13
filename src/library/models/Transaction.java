@@ -5,15 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Transaction {
-    private String id;
-    private String bookId;
-    private String ownerId;
+    private int id;
+    private int bookId;
+    private int ownerId;
     private int lentDate;
     private int returnDate;
 
-    public Transaction(String id, String bookId, String ownerId, int lentDate, int returnDate) {
+    public Transaction(int id, int bookId, int ownerId, int lentDate, int returnDate) {
         this.id = id;
         this.bookId = bookId;
         this.ownerId = ownerId;
@@ -21,15 +23,15 @@ public class Transaction {
         this.returnDate = returnDate;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public String getBookId() {
+    public int getBookId() {
         return bookId;
     }
 
-    public String getOwnerId() {
+    public int getOwnerId() {
         return ownerId;
     }
 
@@ -41,15 +43,15 @@ public class Transaction {
         return returnDate;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public void setBookId(String bookId) {
+    public void setBookId(int bookId) {
         this.bookId = bookId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
     }
 
@@ -148,5 +150,37 @@ public class Transaction {
         } finally {
             Database.closeConnection(conn);
         }
+    }
+
+    public static List<Object[]> getAllTransactions() {
+        List<Object[]> transactions = new ArrayList<>();
+
+        String query = "SELECT * FROM transactions";
+        Connection conn = Database.getConnection();
+        
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Object[] transaction = new Object[5];
+                Book book = Book.getBook(rs.getInt("book_id"));
+                User user = User.getUser(rs.getInt("owner_id"));
+
+                transaction[0] = rs.getInt("id");
+                transaction[1] = book.getTitle();
+                transaction[2] = user.getName();
+                transaction[3] = rs.getInt("lent_date");
+                transaction[4] = rs.getInt("return_date");
+
+                transactions.add(transaction);           
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
+        }
+
+        return transactions;
     }
 }
