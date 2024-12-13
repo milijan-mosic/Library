@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Book {
-    private String id;
+    private int id;
     private String title;
     private String author;
     private String category;
     private String ownerId;
     private int releaseDate;
 
-    public Book(String id, String title, String author, String category, String ownerId, int releaseDate) {
+    public Book(int id, String title, String author, String category, String ownerId, int releaseDate) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -24,7 +24,7 @@ public class Book {
         this.releaseDate = releaseDate;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -48,7 +48,7 @@ public class Book {
         return releaseDate;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -103,7 +103,8 @@ public class Book {
                 book[3] = rs.getString("category");
                 book[4] = rs.getString("owner_id");
                 book[5] = rs.getString("release_date");
-                books.add(book);            }
+                books.add(book);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -131,7 +132,7 @@ public class Book {
                 String ownerId = rs.getString("owner_id");
                 int releaseDate = Integer.parseInt(rs.getString("release_date"));
                 
-                selectedBook = new Book(Integer.toString(id), title, author, category, ownerId, releaseDate);
+                selectedBook = new Book(id, title, author, category, ownerId, releaseDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();

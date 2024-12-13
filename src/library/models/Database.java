@@ -58,8 +58,8 @@ public class Database {
         String createTransactionsTable = """
             CREATE TABLE IF NOT EXISTS transactions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                book_id TEXT NOT NULL,
-                owner_id TEXT NOT NULL,
+                book_id INTEGER NOT NULL,
+                owner_id INTEGER NOT NULL,
                 lent_date INTEGER,
                 return_date INTEGER,
                 FOREIGN KEY (book_id) REFERENCES books(id),

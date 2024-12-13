@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.util.List;
 import javax.swing.border.EmptyBorder;
 
+import library.Library;
 import library.models.Transaction;
 
 public class LendingBookWindow extends JFrame {
@@ -16,7 +17,6 @@ public class LendingBookWindow extends JFrame {
     private JButton confirmButton;
     //
     private String bookTitle;
-    private String userName;
 
     public LendingBookWindow(String bookName, List<String> userNames) {
         setBounds(100, 100, 330, 280);
@@ -54,6 +54,8 @@ public class LendingBookWindow extends JFrame {
             String selectedUser = (String) userDropdown.getSelectedItem();
 
             Transaction.makeTransaction(bookTitle, selectedUser);
+            
+            Library.LoadTransactionsIntoList();
             dispose();
         });
         getContentPane().add(confirmButton);

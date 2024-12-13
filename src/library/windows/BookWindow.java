@@ -168,7 +168,7 @@ public class BookWindow extends JFrame {
         if (updatedTitle.isEmpty() || updatedAuthor.isEmpty() || updatedCategory.isEmpty() || releaseDate == 0) {
             System.out.println("All fields must be filled");
         } else {
-            Book.updateBook(Integer.parseInt(originalBook.getId()), updatedTitle, updatedAuthor, updatedCategory, originalBook.getOwnerId(), releaseDate);
+            Book.updateBook(originalBook.getId(), updatedTitle, updatedAuthor, updatedCategory, originalBook.getOwnerId(), releaseDate);
             Library.bookForUpdating = null;
             Library.LoadBooksIntoList();
             System.out.println("Book updated successfully");

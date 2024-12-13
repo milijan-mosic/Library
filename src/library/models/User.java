@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    private String id;
+    private int id;
     private String name;
     private String email;
     private String phone_number;
     private String note;
 
-    public User(String id, String name, String email, String phone_number, String note) {
+    public User(int id, String name, String email, String phone_number, String note) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -23,7 +23,7 @@ public class User {
         this.note = note;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -43,7 +43,7 @@ public class User {
         return note;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -117,7 +117,7 @@ public class User {
                 String phoneNumber = rs.getString("phone_number");
                 String note = rs.getString("note");
     
-                selectedUser = new User(Integer.toString(id), name, email, phoneNumber, note);
+                selectedUser = new User(id, name, email, phoneNumber, note);
             }
         } catch (SQLException e) {
             e.printStackTrace();

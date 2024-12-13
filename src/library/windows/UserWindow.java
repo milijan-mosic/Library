@@ -133,7 +133,7 @@ public class UserWindow extends JFrame {
         if (updatedName.isEmpty() || updatedEmail.isEmpty() || updatedPhoneNumber.isEmpty()) {
             System.out.println("All fields must be filled");
         } else {
-            User.updateUser(Integer.parseInt(originalUser.getId()), updatedName, updatedEmail, updatedPhoneNumber, updatedNote);
+            User.updateUser(originalUser.getId(), updatedName, updatedEmail, updatedPhoneNumber, updatedNote);
             Library.userForUpdating = null;
             Library.LoadUsersIntoList();
             System.out.println("User updated successfully");
