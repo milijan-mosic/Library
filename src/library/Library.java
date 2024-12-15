@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
@@ -40,6 +41,15 @@ public class Library {
     //
     public static Book bookForUpdating;
     public static User userForUpdating;
+    //
+    public static Boolean showActiveUsers = true;
+    private JCheckBox chckbxShowActiveUsers;
+    //
+    public static Boolean showAvailableBooks = true;
+    private JCheckBox chckbxShowAvailableBooks;
+    //
+    public static Boolean showActiveTransactions = true;
+    private JCheckBox chckbxShowActiveTransactions;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -137,7 +147,7 @@ public class Library {
             if (selectedBookIndex != -1) {
                 String selectedBookInfo = bookList.getModel().getElementAt(selectedBookIndex);
                 String selectedBookName = selectedBookInfo.split(" - ")[0];
-                List<String> activeUserNames = users.stream().filter(user -> (Boolean) user[5]).map(user -> (String) user[1]).toList();
+                List<String> activeUserNames = users.stream().filter(user -> (Integer) user[5] == 1).map(user -> (String) user[1]).toList();
 
                 WindowUtils.openWindowWithButtonControl(btnLendBook, new LendingBookWindow(selectedBookName, activeUserNames));
             } else {
@@ -178,6 +188,7 @@ public class Library {
         btnEditUser.setEnabled(false);
         btnEditUser.addActionListener(e -> {
             getSelectedUser();
+
             if (userForUpdating != null) {
                 WindowUtils.openWindowWithButtonControl(btnEditUser, new UserWindow(userForUpdating));
             }
@@ -216,7 +227,33 @@ public class Library {
         btnReturnBook.setBounds(12, 700, 128, 27);
         btnReturnBook.setEnabled(false);
         frame.getContentPane().add(btnReturnBook);
+        
+        // ---------------------------------------------------------------- *** ----------------------------------------------------------------
+
+        chckbxShowActiveUsers = new JCheckBox("Show active users");
+        chckbxShowActiveUsers.setBounds(876, 701, 132, 25);
+        chckbxShowActiveUsers.setSelected(true);
+        chckbxShowActiveUsers.addActionListener(e -> {
+            showActiveUsers = !showActiveUsers;
+            LoadUsersIntoList();
+        });
+        frame.getContentPane().add(chckbxShowActiveUsers);
+        
+        chckbxShowAvailableBooks = new JCheckBox("Show available books");
+        chckbxShowAvailableBooks.setBounds(716, 701, 156, 25);
+        chckbxShowAvailableBooks.setSelected(true);
+        chckbxShowAvailableBooks.addActionListener(e -> {
+            showAvailableBooks = !showAvailableBooks;
+            LoadBooksIntoList();
+        });
+        frame.getContentPane().add(chckbxShowAvailableBooks);
+        
+        chckbxShowActiveTransactions = new JCheckBox("Show active transactions");
+        chckbxShowActiveTransactions.setBounds(537, 701, 175, 25);
+        frame.getContentPane().add(chckbxShowActiveTransactions);
     
+        // ---------------------------------------------------------------- *** ----------------------------------------------------------------
+
         LoadBooksIntoList();
         LoadUsersIntoList();
         LoadTransactionsIntoList();
@@ -224,29 +261,63 @@ public class Library {
 
     public static void LoadBooksIntoList() {
         books = Book.getAllBooks();
+        List<Object[]> newBooks = new ArrayList<>();
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
         for (Object[] book : books) {
-            String bookInfo = String.format("%s - %s | %s", book[1], book[2], book[3]);
+            Boolean bookLent = (book[4] == "1") ? true : false;
+            String status = (bookLent) ? "-> UNAVAILABLE" : "";
+            String bookInfo = "";
+
+            if (showAvailableBooks && !bookLent) {
+                bookInfo = String.format("%s. %s (%s) - %s %s", book[0], book[1], book[2], book[3], status);
+                listModel.addElement(bookInfo);
+                newBooks.add(book);
+                continue;
+            }
+
+            if (!showAvailableBooks && bookLent) {
+                bookInfo = String.format("%s. %s (%s) - %s %s", book[0], book[1], book[2], book[3], status);
+                listModel.addElement(bookInfo);
+                newBooks.add(book);
+                continue;
+            }
+            
             listModel.addElement(bookInfo);
         }
 
+        books = newBooks;
         bookList.setModel(listModel);
     }
 
     public static void LoadUsersIntoList() {
         users = User.getAllUsers();
+        List<Object[]> newUsers = new ArrayList<>();
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
         for (Object[] user : users) {
-            String status = (Boolean.FALSE.equals(user[5])) ? "-> INACTIVE" : "";
+            Boolean activeUser = (user[5].equals(0)) ? true : false;
+            String status = (user[5].equals(0)) ? "-> INACTIVE" : "";
+            String userInfo = "";
 
-            String userInfo = String.format("%s (%s) - %s %s", user[1], user[2], user[3], status);
-            listModel.addElement(userInfo);
+            if (showActiveUsers && !activeUser) {
+                userInfo = String.format("%s. %s (%s) - %s %s", user[0], user[1], user[2], user[3], status);
+                listModel.addElement(userInfo);
+                newUsers.add(user);
+                continue;
+            }
+
+            if (!showActiveUsers && activeUser) {
+                userInfo = String.format("%s. %s (%s) - %s %s", user[0], user[1], user[2], user[3], status);
+                listModel.addElement(userInfo);
+                newUsers.add(user);
+                continue;
+            }
         }
 
+        users = newUsers;
         userList.setModel(listModel);
     }
 
@@ -264,10 +335,10 @@ public class Library {
             if (returnDate != 0) {
                 finalReturnDate = convertUnixTimestampToSerbianFormat(returnDate);
             } else {
-                finalReturnDate = "Nije vracena...";
+                finalReturnDate = "NOT RETURNED";
             }
     
-            String transactionInfo = String.format("%s -> %s | Izdata: %s, Status: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
+            String transactionInfo = String.format("%s -> %s | Lent: %s, Status: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
             listModel.addElement(transactionInfo);
         }
     
@@ -275,15 +346,19 @@ public class Library {
     }
 
     public void getSelectedBook() {
-        int selectedIndex = bookList.getSelectedIndex() + 1;
+        int selectedIndex = bookList.getSelectedIndex();
+        String selectedBook = bookList.getModel().getElementAt(selectedIndex);
 
-        bookForUpdating = Book.getBook(selectedIndex);
+        String bookIndex = selectedBook.split("\\.")[0];
+        bookForUpdating = Book.getBook(Integer.parseInt(bookIndex));
     }
 
     public void getSelectedUser() {
-        int selectedIndex = userList.getSelectedIndex() + 1;
+        int selectedIndex = userList.getSelectedIndex();
+        String selectedUser = userList.getModel().getElementAt(selectedIndex);
 
-        userForUpdating = User.getUser(selectedIndex);
+        String userIndex = selectedUser.split("\\.")[0];
+        userForUpdating = User.getUser(Integer.parseInt(userIndex));
     }
 
     public static void showDeleteDialog(int itemId, String itemType) {

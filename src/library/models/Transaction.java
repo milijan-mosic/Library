@@ -86,7 +86,7 @@ public class Transaction {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                bookId = Integer.parseInt(rs.getString("id"));
+                bookId = rs.getInt("id");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,7 +109,7 @@ public class Transaction {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                userId = Integer.parseInt(rs.getString("id"));
+                userId = rs.getInt("id");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -123,27 +123,28 @@ public class Transaction {
     public static void makeTransaction(String bookName, String userName) {
         int bookId = getBookIdByName(bookName);
         int userId = getUserIdByName(userName);
-
+    
         if (bookId == 0 || userId == 0) {
             System.out.println("Book or User not found in the database.");
+            return;
         }
-
+    
         int lentDate = (int) Instant.now().getEpochSecond();
         int returnDate = 0;
-
+    
         String query = "INSERT INTO transactions (book_id, owner_id, lent_date, return_date) VALUES (?, ?, ?, ?)";
-
+    
         Connection conn = Database.getConnection();
         
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
-
-            stmt.setString(1, String.valueOf(bookId));
-            stmt.setString(2, String.valueOf(userId));
+    
+            stmt.setInt(1, bookId);
+            stmt.setInt(2, userId);
             stmt.setInt(3, lentDate);
             stmt.setInt(4, returnDate);
             stmt.executeUpdate();
-
+    
             System.out.println("Book: " + bookName + ", Assigned to: " + userName);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -154,7 +155,7 @@ public class Transaction {
 
     public static List<Object[]> getAllTransactions() {
         List<Object[]> transactions = new ArrayList<>();
-
+    
         String query = "SELECT * FROM transactions";
         Connection conn = Database.getConnection();
         
@@ -166,13 +167,16 @@ public class Transaction {
                 Object[] transaction = new Object[5];
                 Book book = Book.getBook(rs.getInt("book_id"));
                 User user = User.getUser(rs.getInt("owner_id"));
-
+    
+                String bookTitle = (book != null) ? book.getTitle() : "Unknown Book";
+                String userName = (user != null) ? user.getName() : "Unknown User";
+    
                 transaction[0] = rs.getInt("id");
-                transaction[1] = book.getTitle();
-                transaction[2] = user.getName();
+                transaction[1] = bookTitle;
+                transaction[2] = userName;
                 transaction[3] = rs.getInt("lent_date");
                 transaction[4] = rs.getInt("return_date");
-
+    
                 transactions.add(transaction);           
             }
         } catch (SQLException e) {
@@ -180,7 +184,7 @@ public class Transaction {
         } finally {
             Database.closeConnection(conn);
         }
-
+    
         return transactions;
-    }
+    }    
 }

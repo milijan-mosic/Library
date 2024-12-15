@@ -49,7 +49,7 @@ public class UserWindow extends JFrame {
         phoneNumberTextField.setText(user.getPhoneNumber());
         noteTextArea.setText(user.getNote());
 
-        if (user.getActive()) {
+        if (user.getActive() == 1) {
             userActive = true;
             rdbtnActive.setSelected(true);
             rdbtnInactive.setSelected(false);
@@ -170,7 +170,9 @@ public class UserWindow extends JFrame {
         if (updatedName.isEmpty() || updatedEmail.isEmpty() || updatedPhoneNumber.isEmpty()) {
             System.out.println("All fields must be filled");
         } else {
-            User.updateUser(originalUser.getId(), updatedName, updatedEmail, updatedPhoneNumber, updatedNote, userActive);
+            Integer active = (userActive) ? 1 : 0;
+
+            User.updateUser(originalUser.getId(), updatedName, updatedEmail, updatedPhoneNumber, updatedNote, active);
             Library.userForUpdating = null;
             userActive = true;
             Library.LoadUsersIntoList();

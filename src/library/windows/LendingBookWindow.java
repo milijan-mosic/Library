@@ -65,7 +65,7 @@ public class LendingBookWindow extends JFrame {
         //
 
         bookField.setText(bookName);
-        bookTitle = bookName;
+        bookTitle = bookName.split("\\.")[1].split("\\(")[0].trim();
 
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(userNames.toArray(new String[0]));
         userDropdown.setModel(model);

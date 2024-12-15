@@ -113,7 +113,7 @@ public class Book {
 
         return books;
     }
-
+    
     public static Book getBook(int id) {
         String query = "SELECT * FROM books WHERE id = ?";
         Book selectedBook = null;
@@ -126,13 +126,14 @@ public class Book {
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
+                Integer bookId = Integer.parseInt(rs.getString("id"));
                 String title = rs.getString("title");
                 String author = rs.getString("author");
                 String category = rs.getString("category");
                 String ownerId = rs.getString("owner_id");
                 int releaseDate = Integer.parseInt(rs.getString("release_date"));
                 
-                selectedBook = new Book(id, title, author, category, ownerId, releaseDate);
+                selectedBook = new Book(bookId, title, author, category, ownerId, releaseDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();

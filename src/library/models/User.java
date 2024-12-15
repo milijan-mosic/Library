@@ -14,9 +14,9 @@ public class User {
     private String email;
     private String phone_number;
     private String note;
-    private Boolean active;
+    private Integer active;
 
-    public User(int id, String name, String email, String phone_number, String note, Boolean active) {
+    public User(int id, String name, String email, String phone_number, String note, Integer active) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -45,7 +45,7 @@ public class User {
         return note;
     }
 
-    public Boolean getActive() {
+    public Integer getActive() {
         return active;
     }
 
@@ -69,7 +69,7 @@ public class User {
         this.note = note;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(Integer active) {
         this.active = active;
     }
 
@@ -101,7 +101,7 @@ public class User {
                 user[2] = rs.getString("email");
                 user[3] = rs.getString("phone_number");
                 user[4] = rs.getString("note");
-                user[5] = rs.getBoolean("active");
+                user[5] = rs.getInt("active");
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -128,7 +128,7 @@ public class User {
                 String email = rs.getString("email");
                 String phoneNumber = rs.getString("phone_number");
                 String note = rs.getString("note");
-                Boolean active = rs.getBoolean("active");
+                Integer active = rs.getInt("active");
     
                 selectedUser = new User(id, name, email, phoneNumber, note, active);
             }
@@ -153,7 +153,7 @@ public class User {
             stmt.setString(2, email);
             stmt.setString(3, phoneNumber);
             stmt.setString(4, note);
-            stmt.setBoolean(5, true);
+            stmt.setInt(5, 1);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -162,7 +162,7 @@ public class User {
         }
     }
 
-    public static void updateUser(int id, String name, String email, String phoneNumber, String note, Boolean active) {
+    public static void updateUser(int id, String name, String email, String phoneNumber, String note, Integer active) {
         String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, note = ?, active = ? WHERE id = ?";
     
         Connection conn = Database.getConnection();
@@ -174,7 +174,7 @@ public class User {
             stmt.setString(2, email);
             stmt.setString(3, phoneNumber);
             stmt.setString(4, note);
-            stmt.setBoolean(5, active);
+            stmt.setInt(5, active);
             stmt.setInt(6, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
