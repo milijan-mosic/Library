@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 
 import library.Library;
 import library.models.Book;
+import javax.swing.JSlider;
 
 public class BookWindow extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -31,6 +32,7 @@ public class BookWindow extends JFrame {
     private JDatePickerImpl datePicker;
     private JButton closeButton;
     private JButton confirmButton;
+    private JSlider ratingSlider;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -56,6 +58,8 @@ public class BookWindow extends JFrame {
         calendar.set(Calendar.YEAR, book.getReleaseDate());
         datePicker.getModel().setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePicker.getModel().setSelected(true);
+
+        ratingSlider.setValue(book.getRating());
     }
     
     public BookWindow() {
@@ -123,6 +127,20 @@ public class BookWindow extends JFrame {
             }
         });
         contentPane.add(confirmButton);
+
+        JLabel lblRating = new JLabel("Rating");
+        lblRating.setBounds(12, 262, 60, 17);
+        contentPane.add(lblRating);
+
+        ratingSlider = new JSlider(0, 5);
+        ratingSlider.setValue(3); 
+        ratingSlider.setMajorTickSpacing(1);
+        ratingSlider.setMinorTickSpacing(1);
+        ratingSlider.setPaintTicks(true);
+        ratingSlider.setPaintLabels(true);
+        ratingSlider.setBounds(12, 291, 200, 44);
+        contentPane.add(ratingSlider);
+        
     }
 
     private void insertBookToDatabase() {
@@ -142,7 +160,7 @@ public class BookWindow extends JFrame {
         if (title.isEmpty() || author.isEmpty() || category.isEmpty() || releaseDate == 0) {
             System.out.println("All fields must be filled");
         } else {
-            Book.insertBook(title, author, category, "1", releaseDate);
+            Book.insertBook(title, author, category, "1", releaseDate, ratingSlider.getValue());
             Library.LoadBooksIntoList();
             System.out.println("Book inserted successfully");
             dispose();
@@ -168,7 +186,7 @@ public class BookWindow extends JFrame {
         if (updatedTitle.isEmpty() || updatedAuthor.isEmpty() || updatedCategory.isEmpty() || releaseDate == 0) {
             System.out.println("All fields must be filled");
         } else {
-            Book.updateBook(originalBook.getId(), updatedTitle, updatedAuthor, updatedCategory, originalBook.getOwnerId(), releaseDate);
+            Book.updateBook(originalBook.getId(), updatedTitle, updatedAuthor, updatedCategory, originalBook.getOwnerId(), releaseDate, ratingSlider.getValue());
             Library.bookForUpdating = null;
             Library.LoadBooksIntoList();
             System.out.println("Book updated successfully");

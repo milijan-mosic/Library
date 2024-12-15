@@ -14,14 +14,16 @@ public class Book {
     private String category;
     private String ownerId;
     private int releaseDate;
+    private int rating;
 
-    public Book(int id, String title, String author, String category, String ownerId, int releaseDate) {
+    public Book(int id, String title, String author, String category, String ownerId, int releaseDate, int rating) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.category = category;
         this.ownerId = ownerId;
         this.releaseDate = releaseDate;
+        this.rating = rating;
     }
 
     public int getId() {
@@ -48,6 +50,10 @@ public class Book {
         return releaseDate;
     }
 
+    public int getRating() {
+        return rating;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -72,6 +78,10 @@ public class Book {
         this.releaseDate = releaseDate;
     }
 
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
     @Override
     public String toString() {
         return "Book{" +
@@ -81,9 +91,9 @@ public class Book {
                 ", category='" + category + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", releaseDate=" + releaseDate +
+                ", rating=" + rating +
                 '}';
     }
-    
 
     public static List<Object[]> getAllBooks() {
         List<Object[]> books = new ArrayList<>();
@@ -96,13 +106,14 @@ public class Book {
             ResultSet rs = stmt.executeQuery();
             
             while (rs.next()) {
-                Object[] book = new Object[6];
+                Object[] book = new Object[7];
                 book[0] = rs.getInt("id");
                 book[1] = rs.getString("title");
                 book[2] = rs.getString("author");
                 book[3] = rs.getString("category");
                 book[4] = rs.getString("owner_id");
                 book[5] = rs.getString("release_date");
+                book[6] = rs.getInt("rating");
                 books.add(book);
             }
         } catch (SQLException e) {
@@ -132,8 +143,9 @@ public class Book {
                 String category = rs.getString("category");
                 String ownerId = rs.getString("owner_id");
                 int releaseDate = Integer.parseInt(rs.getString("release_date"));
+                int rating = Integer.parseInt(rs.getString("rating"));
                 
-                selectedBook = new Book(bookId, title, author, category, ownerId, releaseDate);
+                selectedBook = new Book(bookId, title, author, category, ownerId, releaseDate, rating);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -144,8 +156,8 @@ public class Book {
         return selectedBook;
     }
     
-    public static void insertBook(String title, String author, String category, String ownerId, int releaseDate) {
-        String query = "INSERT INTO books (title, author, category, owner_id, release_date) VALUES (?, ?, ?, ?, ?)";
+    public static void insertBook(String title, String author, String category, String ownerId, int releaseDate, int rating) {
+        String query = "INSERT INTO books (title, author, category, owner_id, release_date) VALUES (?, ?, ?, ?, ?, ?)";
 
         Connection conn = Database.getConnection();
         
@@ -157,6 +169,7 @@ public class Book {
             stmt.setString(3, category);
             stmt.setString(4, ownerId);
             stmt.setInt(5, releaseDate);
+            stmt.setInt(6, rating);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -165,8 +178,8 @@ public class Book {
         }
     }
 
-    public static void updateBook(int id, String title, String author, String category, String ownerId, int releaseDate) {
-        String query = "UPDATE books SET title = ?, author = ?, category = ?, release_date = ? WHERE id = ? AND owner_id = ?";
+    public static void updateBook(int id, String title, String author, String category, String ownerId, int releaseDate, int rating) {
+        String query = "UPDATE books SET title = ?, author = ?, category = ?, release_date = ?, rating = ? WHERE id = ? AND owner_id = ?";
     
         Connection conn = Database.getConnection();
     
@@ -177,8 +190,9 @@ public class Book {
             stmt.setString(2, author);
             stmt.setString(3, category);
             stmt.setInt(4, releaseDate);
-            stmt.setInt(5, id);
-            stmt.setString(6, ownerId);
+            stmt.setInt(5, rating);
+            stmt.setInt(6, id);
+            stmt.setString(7, ownerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

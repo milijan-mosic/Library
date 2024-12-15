@@ -41,7 +41,8 @@ public class Database {
                 author TEXT NOT NULL,
                 category TEXT NOT NULL,
                 owner_id TEXT,
-                release_date INTEGER
+                release_date INTEGER,
+                rating INTEGER
             );
         """;
 
@@ -89,10 +90,10 @@ public class Database {
         """;
         
         String insertBooks = """
-            INSERT INTO books (id, title, author, category, owner_id, release_date) VALUES
-            ('1', 'The Great Gatsby', 'F. Scott Fitzgerald', 'Fiction', '1', 1925),
-            ('2', '1984', 'George Orwell', 'Dystopian', '1', 1949),
-            ('3', 'To Kill a Mockingbird', 'Harper Lee', 'Fiction', '1', 1960);
+            INSERT INTO books (id, title, author, category, owner_id, release_date, rating) VALUES
+            ('1', 'The Great Gatsby', 'F. Scott Fitzgerald', 'Fiction', '1', 1925, 3),
+            ('2', '1984', 'George Orwell', 'Dystopian', '1', 1949, 4),
+            ('3', 'To Kill a Mockingbird', 'Harper Lee', 'Fiction', '1', 1960, 5);
         """;
 
         Connection conn = Database.getConnection();
