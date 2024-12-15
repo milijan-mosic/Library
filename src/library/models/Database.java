@@ -51,7 +51,8 @@ public class Database {
                 name TEXT NOT NULL,
                 email TEXT NOT NULL,
                 phone_number TEXT,
-                note TEXT
+                note TEXT,
+                active BIT
             );
         """;
 

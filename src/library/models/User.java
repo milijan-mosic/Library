@@ -14,13 +14,15 @@ public class User {
     private String email;
     private String phone_number;
     private String note;
+    private Boolean active;
 
-    public User(int id, String name, String email, String phone_number, String note) {
+    public User(int id, String name, String email, String phone_number, String note, Boolean active) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone_number = phone_number;
         this.note = note;
+        this.active = active;
     }
 
     public int getId() {
@@ -43,6 +45,10 @@ public class User {
         return note;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -63,6 +69,10 @@ public class User {
         this.note = note;
     }
 
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -71,12 +81,13 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phone_number='" + phone_number + '\'' +
                 ", note='" + note + '\'' +
+                ", active='" + active + '\'' +
                 '}';
     }
     
     public static List<Object[]> getAllUsers() {
         List<Object[]> users = new ArrayList<>();
-        String query = "SELECT id, name, email, phone_number, note FROM users";
+        String query = "SELECT * FROM users";
         
         Connection conn = Database.getConnection(); 
         try {
@@ -84,12 +95,13 @@ public class User {
             ResultSet rs = stmt.executeQuery(query);
             
             while (rs.next()) {
-                Object[] user = new Object[5];
+                Object[] user = new Object[6];
                 user[0] = rs.getInt("id");
                 user[1] = rs.getString("name");
                 user[2] = rs.getString("email");
                 user[3] = rs.getString("phone_number");
                 user[4] = rs.getString("note");
+                user[5] = rs.getBoolean("active");
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -116,8 +128,9 @@ public class User {
                 String email = rs.getString("email");
                 String phoneNumber = rs.getString("phone_number");
                 String note = rs.getString("note");
+                Boolean active = rs.getBoolean("active");
     
-                selectedUser = new User(id, name, email, phoneNumber, note);
+                selectedUser = new User(id, name, email, phoneNumber, note, active);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -129,7 +142,7 @@ public class User {
     }
     
     public static void insertUser(String name, String email, String phoneNumber, String note) {
-        String query = "INSERT INTO users (name, email, phone_number, note) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO users (name, email, phone_number, note, active) VALUES (?, ?, ?, ?, ?)";
         
         Connection conn = Database.getConnection();
         
@@ -140,6 +153,7 @@ public class User {
             stmt.setString(2, email);
             stmt.setString(3, phoneNumber);
             stmt.setString(4, note);
+            stmt.setBoolean(5, true);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -148,19 +162,20 @@ public class User {
         }
     }
 
-    public static void updateUser(int id, String name, String email, String phoneNumber, String note) {
-        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, note = ? WHERE id = ?";
+    public static void updateUser(int id, String name, String email, String phoneNumber, String note, Boolean active) {
+        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, note = ?, active = ? WHERE id = ?";
     
         Connection conn = Database.getConnection();
     
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
-    
+
             stmt.setString(1, name);
             stmt.setString(2, email);
             stmt.setString(3, phoneNumber);
             stmt.setString(4, note);
-            stmt.setInt(5, id);
+            stmt.setBoolean(5, active);
+            stmt.setInt(6, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

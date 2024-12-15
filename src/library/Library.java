@@ -137,9 +137,9 @@ public class Library {
             if (selectedBookIndex != -1) {
                 String selectedBookInfo = bookList.getModel().getElementAt(selectedBookIndex);
                 String selectedBookName = selectedBookInfo.split(" - ")[0];
-                List<String> userNames = users.stream().map(user -> (String) user[1]).toList();
+                List<String> activeUserNames = users.stream().filter(user -> (Boolean) user[5]).map(user -> (String) user[1]).toList();
 
-                WindowUtils.openWindowWithButtonControl(btnLendBook, new LendingBookWindow(selectedBookName, userNames));
+                WindowUtils.openWindowWithButtonControl(btnLendBook, new LendingBookWindow(selectedBookName, activeUserNames));
             } else {
                 JOptionPane.showMessageDialog(frame, "Please select a book to lend.", "No Book Selected", JOptionPane.WARNING_MESSAGE);
             }
@@ -241,7 +241,9 @@ public class Library {
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
         for (Object[] user : users) {
-            String userInfo = String.format("%s (%s) - %s", user[1], user[2], user[3]);
+            String status = (Boolean.FALSE.equals(user[5])) ? "-> INACTIVE" : "";
+
+            String userInfo = String.format("%s (%s) - %s %s", user[1], user[2], user[3], status);
             listModel.addElement(userInfo);
         }
 

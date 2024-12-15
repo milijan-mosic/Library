@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
+import javax.swing.JRadioButton;
 
 public class UserWindow extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -23,6 +24,9 @@ public class UserWindow extends JFrame {
     private JTextArea noteTextArea;
     private JButton closeButton;
     private JButton confirmButton;
+    private Boolean userActive = true;
+    private JRadioButton rdbtnActive;
+    private JRadioButton rdbtnInactive;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -44,6 +48,16 @@ public class UserWindow extends JFrame {
         emailTextField.setText(user.getEmail());
         phoneNumberTextField.setText(user.getPhoneNumber());
         noteTextArea.setText(user.getNote());
+
+        if (user.getActive()) {
+            userActive = true;
+            rdbtnActive.setSelected(true);
+            rdbtnInactive.setSelected(false);
+        } else {
+            userActive = false;
+            rdbtnActive.setSelected(false);
+            rdbtnInactive.setSelected(true);
+        }        
     }
 
     public UserWindow() {
@@ -104,6 +118,29 @@ public class UserWindow extends JFrame {
             }
         });
         contentPane.add(confirmButton);
+        
+        JLabel lblActive = new JLabel("Membership");
+        lblActive.setBounds(286, 195, 92, 17);
+        contentPane.add(lblActive);
+        
+        rdbtnActive = new JRadioButton("Active");
+        rdbtnActive.setBounds(276, 220, 71, 25);
+        rdbtnActive.setSelected(true);
+        rdbtnActive.addActionListener(e -> {
+            userActive = true;
+            rdbtnActive.setSelected(true);
+            rdbtnInactive.setSelected(false);
+        });
+        contentPane.add(rdbtnActive);
+        
+        rdbtnInactive = new JRadioButton("Inactive");
+        rdbtnInactive.setBounds(276, 249, 160, 25);
+        rdbtnInactive.addActionListener(e -> {
+            userActive = false;
+            rdbtnActive.setSelected(false);
+            rdbtnInactive.setSelected(true);
+        });
+        contentPane.add(rdbtnInactive);
     }
     
     private void insertUserIntoDatabase() {
@@ -133,8 +170,9 @@ public class UserWindow extends JFrame {
         if (updatedName.isEmpty() || updatedEmail.isEmpty() || updatedPhoneNumber.isEmpty()) {
             System.out.println("All fields must be filled");
         } else {
-            User.updateUser(originalUser.getId(), updatedName, updatedEmail, updatedPhoneNumber, updatedNote);
+            User.updateUser(originalUser.getId(), updatedName, updatedEmail, updatedPhoneNumber, updatedNote, userActive);
             Library.userForUpdating = null;
+            userActive = true;
             Library.LoadUsersIntoList();
             System.out.println("User updated successfully");
             dispose();
