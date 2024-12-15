@@ -250,6 +250,11 @@ public class Library {
         
         chckbxShowActiveTransactions = new JCheckBox("Show active transactions");
         chckbxShowActiveTransactions.setBounds(537, 701, 175, 25);
+        chckbxShowActiveTransactions.setSelected(true);
+        chckbxShowActiveTransactions.addActionListener(e -> {
+            showActiveTransactions = !showActiveTransactions;
+            LoadTransactionsIntoList();
+        });
         frame.getContentPane().add(chckbxShowActiveTransactions);
     
         // ---------------------------------------------------------------- *** ----------------------------------------------------------------
@@ -323,10 +328,13 @@ public class Library {
 
     public static void LoadTransactionsIntoList() {
         List<Object[]> transactions = Transaction.getAllTransactions();
+        List<Object[]> newTransactions = new ArrayList<>();
     
         DefaultListModel<String> listModel = new DefaultListModel<>();
     
         for (Object[] transaction : transactions) {
+            Boolean activeTransaction = (transaction[4].equals(0)) ? true : false;
+
             int lentDateStr = (int) transaction[3];
             String finalLentDate = convertUnixTimestampToSerbianFormat(lentDateStr);
     
@@ -337,11 +345,23 @@ public class Library {
             } else {
                 finalReturnDate = "NOT RETURNED";
             }
-    
-            String transactionInfo = String.format("%s -> %s | Lent: %s, Status: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
-            listModel.addElement(transactionInfo);
+
+            if (showActiveTransactions && activeTransaction) {
+                String transactionInfo = String.format("%s -> %s | Lent: %s, Status: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
+                listModel.addElement(transactionInfo);
+                newTransactions.add(transaction);
+                continue;
+            }
+
+            if (!showActiveTransactions && !activeTransaction) {
+                String transactionInfo = String.format("%s -> %s | Lent: %s, Status: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
+                listModel.addElement(transactionInfo);
+                newTransactions.add(transaction);
+                continue;
+            }
         }
-    
+        
+        transactions = newTransactions;
         transactionList.setModel(listModel);
     }
 
