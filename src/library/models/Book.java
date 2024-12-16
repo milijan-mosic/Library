@@ -193,6 +193,7 @@ public class Book {
             stmt.setInt(5, rating);
             stmt.setInt(6, id);
             stmt.setString(7, ownerId);
+            
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -74,7 +74,7 @@ public class Transaction {
                 '}';
     }
 
-    private static int getBookIdByName(String bookName) {
+    public static int getBookIdByName(String bookName) {
         String query = "SELECT id FROM books WHERE title = ?";
         int bookId = 0;
 
@@ -97,7 +97,7 @@ public class Transaction {
         return bookId;
     }
     
-    private static int getUserIdByName(String userName) {
+    public static int getUserIdByName(String userName) {
         String query = "SELECT id FROM users WHERE name = ?";
         int userId = 0;
 
@@ -118,39 +118,6 @@ public class Transaction {
         }
         
         return userId;
-    }
-        
-    public static void makeTransaction(String bookName, String userName) {
-        int bookId = getBookIdByName(bookName);
-        int userId = getUserIdByName(userName);
-    
-        if (bookId == 0 || userId == 0) {
-            System.out.println("Book or User not found in the database.");
-            return;
-        }
-    
-        int lentDate = (int) Instant.now().getEpochSecond();
-        int returnDate = 0;
-    
-        String query = "INSERT INTO transactions (book_id, owner_id, lent_date, return_date) VALUES (?, ?, ?, ?)";
-    
-        Connection conn = Database.getConnection();
-        
-        try {
-            PreparedStatement stmt = conn.prepareStatement(query);
-    
-            stmt.setInt(1, bookId);
-            stmt.setInt(2, userId);
-            stmt.setInt(3, lentDate);
-            stmt.setInt(4, returnDate);
-            stmt.executeUpdate();
-    
-            System.out.println("Book: " + bookName + ", Assigned to: " + userName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.closeConnection(conn);
-        }
     }
 
     public static List<Object[]> getAllTransactions() {
@@ -186,5 +153,65 @@ public class Transaction {
         }
     
         return transactions;
-    }    
+    }
+        
+    public static void makeTransaction(String bookName, String userName) {
+        int bookId = getBookIdByName(bookName);
+        int userId = getUserIdByName(userName);
+    
+        if (bookId == 0 || userId == 0) {
+            System.out.println("Book or User not found in the database.");
+            return;
+        }
+    
+        int lentDate = (int) Instant.now().getEpochSecond();
+        int returnDate = 0;
+    
+        String query = "INSERT INTO transactions (book_id, owner_id, lent_date, return_date) VALUES (?, ?, ?, ?)";
+    
+        Connection conn = Database.getConnection();
+        
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+    
+            stmt.setInt(1, bookId);
+            stmt.setInt(2, userId);
+            stmt.setInt(3, lentDate);
+            stmt.setInt(4, returnDate);
+            stmt.executeUpdate();
+    
+            System.out.println("Book: " + bookName + ", Assigned to: " + userName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
+        }
+    }
+
+    public static void updateTransaction(int bookId, int userId) {
+        if (bookId == 0 || userId == 0) {
+            System.out.println("Book or User not found.");
+            return;
+        }
+    
+        String query = "UPDATE transactions SET return_date = ? WHERE book_id = ? AND owner_id = ? AND return_date = 0";
+        int returnDate = (int) Instant.now().getEpochSecond();
+
+        Connection conn = Database.getConnection();
+    
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+    
+            stmt.setInt(1, returnDate);
+            stmt.setInt(2, bookId);
+            stmt.setInt(3, userId);
+    
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
+        }
+    }
+    
 }

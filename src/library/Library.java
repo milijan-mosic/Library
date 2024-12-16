@@ -226,6 +226,25 @@ public class Library {
         btnReturnBook = new JButton("Return book");
         btnReturnBook.setBounds(12, 700, 128, 27);
         btnReturnBook.setEnabled(false);
+        btnReturnBook.addActionListener(e -> {
+            int selectedTransactionIndex = transactionList.getSelectedIndex();
+
+            if (selectedTransactionIndex != -1) {
+                String selectedTransactionText = transactionList.getModel().getElementAt(selectedTransactionIndex);
+
+                String bookName = selectedTransactionText.split(" -> ")[0];
+                String userName = selectedTransactionText.split(" -> ")[1].split("\\|")[0].trim();
+
+                System.out.println("bookName -> " + bookName);
+                System.out.println("userName -> " + userName);
+
+                int bookId = Transaction.getBookIdByName(bookName);
+                int userId = Transaction.getUserIdByName(userName);
+
+                Transaction.updateTransaction(bookId, userId);
+                LoadTransactionsIntoList();
+            }
+        });
         frame.getContentPane().add(btnReturnBook);
         
         // ---------------------------------------------------------------- *** ----------------------------------------------------------------
@@ -354,7 +373,7 @@ public class Library {
             }
 
             if (!showActiveTransactions && !activeTransaction) {
-                String transactionInfo = String.format("%s -> %s | Lent: %s, Status: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
+                String transactionInfo = String.format("%s -> %s | Lent: %s, Returned: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
                 listModel.addElement(transactionInfo);
                 newTransactions.add(transaction);
                 continue;
