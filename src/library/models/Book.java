@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book {
+public class Book implements Cloneable {
     private int id;
     private String title;
     private String author;
