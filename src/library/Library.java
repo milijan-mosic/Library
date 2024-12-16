@@ -275,6 +275,13 @@ public class Library {
             LoadTransactionsIntoList();
         });
         frame.getContentPane().add(chckbxShowActiveTransactions);
+        
+        JButton btnBackup = new JButton("Backup");
+        btnBackup.setBounds(423, 700, 106, 27);
+        btnBackup.addActionListener(e -> {
+            Transaction.logTransaction("backup.txt", transactionList);
+        });
+        frame.getContentPane().add(btnBackup);
     
         // ---------------------------------------------------------------- *** ----------------------------------------------------------------
 
