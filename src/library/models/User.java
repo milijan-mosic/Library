@@ -84,6 +84,16 @@ public class User {
                 ", active='" + active + '\'' +
                 '}';
     }
+
+    @Override
+    public User clone() {
+        try {
+            return (User) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     
     public static List<Object[]> getAllUsers() {
         List<Object[]> users = new ArrayList<>();

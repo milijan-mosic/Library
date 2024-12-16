@@ -95,6 +95,16 @@ public class Book {
                 '}';
     }
 
+    @Override
+    public Book clone() {
+        try {
+            return (Book) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static List<Object[]> getAllBooks() {
         List<Object[]> books = new ArrayList<>();
 
