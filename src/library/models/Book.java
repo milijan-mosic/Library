@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book implements Cloneable {
+public class Book extends LibraryItem {
     private int id;
     private String title;
     private String author;
@@ -80,6 +80,11 @@ public class Book implements Cloneable {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return title + " by " + author;
     }
 
     @Override
