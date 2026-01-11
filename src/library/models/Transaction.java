@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JList;
 
-import library.utils.FileUtils;
+import library.utils.GenericFileWriter;
 
 
 public class Transaction {
@@ -211,15 +211,14 @@ public class Transaction {
             Database.closeConnection(conn);
         }
     }
-    
+
     public static void logTransaction(String filePath, JList<String> jList) {
-        FileUtils fileUtils = new FileUtils();
-    
         StringBuilder content = new StringBuilder();
         for (int i = 0; i < jList.getModel().getSize(); i++) {
             content.append(jList.getModel().getElementAt(i)).append(System.lineSeparator());
         }
-    
-        fileUtils.writeToFile(filePath, content.toString());
+
+        GenericFileWriter<String> fileWriter = new GenericFileWriter<>("");
+        fileWriter.writeToFile(filePath, content.toString());
     }
 }
