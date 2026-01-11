@@ -124,41 +124,35 @@ public class Transaction {
         return userId;
     }
 
-    public static List<Object[]> getAllTransactions() {
-        List<Object[]> transactions = new ArrayList<>();
-    
+    public static List<Transaction> getAllTransactions() {
+        List<Transaction> transactions = new ArrayList<>();
+
         String query = "SELECT * FROM transactions";
         Connection conn = Database.getConnection();
-        
+
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
-            
+
             while (rs.next()) {
-                Object[] transaction = new Object[5];
-                Book book = Book.getBook(rs.getInt("book_id"));
-                User user = User.getUser(rs.getInt("owner_id"));
-    
-                String bookTitle = (book != null) ? book.getTitle() : "Unknown Book";
-                String userName = (user != null) ? user.getName() : "Unknown User";
-    
-                transaction[0] = rs.getInt("id");
-                transaction[1] = bookTitle;
-                transaction[2] = userName;
-                transaction[3] = rs.getInt("lent_date");
-                transaction[4] = rs.getInt("return_date");
-    
-                transactions.add(transaction);           
+                Transaction transaction = new Transaction(
+                    rs.getInt("id"),
+                    rs.getInt("book_id"),
+                    rs.getInt("owner_id"),
+                    rs.getInt("lent_date"),
+                    rs.getInt("return_date")
+                );
+                transactions.add(transaction);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             Database.closeConnection(conn);
         }
-    
+
         return transactions;
     }
-        
+    
     public static void makeTransaction(String bookName, String userName) {
         int bookId = getBookIdByName(bookName);
         int userId = getUserIdByName(userName);

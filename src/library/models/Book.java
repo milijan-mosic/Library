@@ -125,8 +125,8 @@ public class Book extends LibraryItem implements Lendable {
         return ownerId == null;
     }
 
-    public static List<Object[]> getAllBooks() {
-        List<Object[]> books = new ArrayList<>();
+    public static List<Book> getAllBooks() {
+        List<Book> books = new ArrayList<>();
 
         String query = "SELECT * FROM books";
         Connection conn = Database.getConnection();
@@ -136,14 +136,15 @@ public class Book extends LibraryItem implements Lendable {
             ResultSet rs = stmt.executeQuery();
             
             while (rs.next()) {
-                Object[] book = new Object[7];
-                book[0] = rs.getInt("id");
-                book[1] = rs.getString("title");
-                book[2] = rs.getString("author");
-                book[3] = rs.getString("category");
-                book[4] = rs.getString("owner_id");
-                book[5] = rs.getString("release_date");
-                book[6] = rs.getInt("rating");
+                Book book = new Book(
+                    rs.getInt("id"),
+                    rs.getString("title"),
+                    rs.getString("author"),
+                    rs.getString("category"),
+                    rs.getString("owner_id"),
+                    rs.getInt("release_date"),
+                    rs.getInt("rating")
+                );
                 books.add(book);
             }
         } catch (SQLException e) {

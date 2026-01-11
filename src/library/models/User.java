@@ -95,30 +95,32 @@ public class User implements Cloneable {
         }
     }
     
-    public static List<Object[]> getAllUsers() {
-        List<Object[]> users = new ArrayList<>();
+    public static List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
         String query = "SELECT * FROM users";
-        
-        Connection conn = Database.getConnection(); 
+
+        Connection conn = Database.getConnection();
         try {
-            Statement stmt = conn.createStatement(); 
+            Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            
+
             while (rs.next()) {
-                Object[] user = new Object[6];
-                user[0] = rs.getInt("id");
-                user[1] = rs.getString("name");
-                user[2] = rs.getString("email");
-                user[3] = rs.getString("phone_number");
-                user[4] = rs.getString("note");
-                user[5] = rs.getInt("active");
+                User user = new User(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("phone_number"),
+                    rs.getString("note"),
+                    rs.getInt("active")
+                );
                 users.add(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.closeConnection(conn);
         }
-        
-        Database.closeConnection(conn);
+
         return users;
     }
     

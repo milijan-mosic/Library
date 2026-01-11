@@ -19,19 +19,20 @@ import library.utils.WindowUtils;
 import library.windows.BookWindow;
 import library.windows.LendingBookWindow;
 import library.windows.UserWindow;
+import java.util.stream.Collectors;
 
 public class Library {
     private JFrame frame;
     //
     private static JList<String> bookList;
-    private static List<Object[]> books;
+    private static List<Book> books;
     private JButton btnAddBook;
     private JButton btnEditBook;
     private JButton btnDeleteBook;
     private JButton btnLendBook;
     //
     private static JList<String> userList;
-    private static List<Object[]> users;
+    private static List<User> users;
     private JButton btnAddUser;
     private JButton btnEditUser;
     private JButton btnDeleteUser;
@@ -147,11 +148,20 @@ public class Library {
             if (selectedBookIndex != -1) {
                 String selectedBookInfo = bookList.getModel().getElementAt(selectedBookIndex);
                 String selectedBookName = selectedBookInfo.split(" - ")[0];
-                List<String> activeUserNames = users.stream().filter(user -> (Integer) user[5] == 1).map(user -> (String) user[1]).toList();
 
-                WindowUtils.openWindowWithButtonControl(btnLendBook, new LendingBookWindow(selectedBookName, activeUserNames));
+                List<String> activeUserNames = users.stream().filter(user -> user.getActive() == 1).map(User::getName).collect(Collectors.toList());
+
+                WindowUtils.openWindowWithButtonControl(
+                    btnLendBook,
+                    new LendingBookWindow(selectedBookName, activeUserNames)
+                );
             } else {
-                JOptionPane.showMessageDialog(frame, "Please select a book to lend.", "No Book Selected", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "Please select a book to lend.",
+                    "No Book Selected",
+                    JOptionPane.WARNING_MESSAGE
+                );
             }
         });
         
@@ -292,24 +302,24 @@ public class Library {
 
     public static void LoadBooksIntoList() {
         books = Book.getAllBooks();
-        List<Object[]> newBooks = new ArrayList<>();
+        List<Book> newBooks = new ArrayList<>();
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
-        for (Object[] book : books) {
-            Boolean bookLent = (book[4] == "1") ? true : false;
+        for (Book book : books) {
+            Boolean bookLent = (book.getOwnerId() == "1") ? true : false;
             String status = (bookLent) ? "-> UNAVAILABLE" : "";
             String bookInfo = "";
 
             if (showAvailableBooks && !bookLent) {
-                bookInfo = String.format("%s. %s (%s) - %s %s", book[0], book[1], book[2], book[3], status);
+                bookInfo = String.format("%s. %s (%s) - %s %s", book.getId(), book.getTitle(), book.getAuthor(), book.getCategory(), status);
                 listModel.addElement(bookInfo);
                 newBooks.add(book);
                 continue;
             }
 
             if (!showAvailableBooks && bookLent) {
-                bookInfo = String.format("%s. %s (%s) - %s %s", book[0], book[1], book[2], book[3], status);
+                bookInfo = String.format("%s. %s (%s) - %s %s", book.getId(), book.getTitle(), book.getAuthor(), book.getCategory(), status);
                 listModel.addElement(bookInfo);
                 newBooks.add(book);
                 continue;
@@ -323,28 +333,39 @@ public class Library {
     }
 
     public static void LoadUsersIntoList() {
-        users = User.getAllUsers();
-        List<Object[]> newUsers = new ArrayList<>();
+        List<User> users = User.getAllUsers();
+        List<User> newUsers = new ArrayList<>();
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
-        for (Object[] user : users) {
-            Boolean activeUser = (user[5].equals(0)) ? true : false;
-            String status = (user[5].equals(0)) ? "-> INACTIVE" : "";
-            String userInfo = "";
+        for (User user : users) {
+            boolean activeUser = user.getActive() == 1;
+            String status = activeUser ? "" : "-> INACTIVE";
 
             if (showActiveUsers && !activeUser) {
-                userInfo = String.format("%s. %s (%s) - %s %s", user[0], user[1], user[2], user[3], status);
+                String userInfo = String.format(
+                    "%d. %s (%s) - %s %s",
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    status
+                );
                 listModel.addElement(userInfo);
                 newUsers.add(user);
-                continue;
             }
 
             if (!showActiveUsers && activeUser) {
-                userInfo = String.format("%s. %s (%s) - %s %s", user[0], user[1], user[2], user[3], status);
+                String userInfo = String.format(
+                    "%d. %s (%s) - %s %s",
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    status
+                );
                 listModel.addElement(userInfo);
                 newUsers.add(user);
-                continue;
             }
         }
 
@@ -353,40 +374,47 @@ public class Library {
     }
 
     public static void LoadTransactionsIntoList() {
-        List<Object[]> transactions = Transaction.getAllTransactions();
-        List<Object[]> newTransactions = new ArrayList<>();
-    
-        DefaultListModel<String> listModel = new DefaultListModel<>();
-    
-        for (Object[] transaction : transactions) {
-            Boolean activeTransaction = (transaction[4].equals(0)) ? true : false;
+        List<Transaction> transactions = Transaction.getAllTransactions();
+        List<Transaction> newTransactions = new ArrayList<>();
 
-            int lentDateStr = (int) transaction[3];
-            String finalLentDate = convertUnixTimestampToSerbianFormat(lentDateStr);
-    
-            int returnDate = (int) transaction[4];
-            String finalReturnDate = "";
-            if (returnDate != 0) {
-                finalReturnDate = convertUnixTimestampToSerbianFormat(returnDate);
-            } else {
-                finalReturnDate = "NOT RETURNED";
-            }
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+
+        for (Transaction transaction : transactions) {
+            boolean activeTransaction = transaction.getReturnDate() == 0;
+
+            String lentDate = convertUnixTimestampToSerbianFormat(
+                transaction.getLentDate()
+            );
+
+            String returnDateStr = activeTransaction
+                    ? "NOT RETURNED"
+                    : convertUnixTimestampToSerbianFormat(transaction.getReturnDate());
 
             if (showActiveTransactions && activeTransaction) {
-                String transactionInfo = String.format("%s -> %s | Lent: %s, Status: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
+                String transactionInfo = String.format(
+                    "Book ID: %d -> User ID: %d | Lent: %s | Status: %s",
+                    transaction.getBookId(),
+                    transaction.getOwnerId(),
+                    lentDate,
+                    returnDateStr
+                );
                 listModel.addElement(transactionInfo);
                 newTransactions.add(transaction);
-                continue;
             }
 
             if (!showActiveTransactions && !activeTransaction) {
-                String transactionInfo = String.format("%s -> %s | Lent: %s, Returned: %s", transaction[1], transaction[2], finalLentDate, finalReturnDate);
+                String transactionInfo = String.format(
+                    "Book ID: %d -> User ID: %d | Lent: %s | Returned: %s",
+                    transaction.getBookId(),
+                    transaction.getOwnerId(),
+                    lentDate,
+                    returnDateStr
+                );
                 listModel.addElement(transactionInfo);
                 newTransactions.add(transaction);
-                continue;
             }
         }
-        
+
         transactions = newTransactions;
         transactionList.setModel(listModel);
     }
