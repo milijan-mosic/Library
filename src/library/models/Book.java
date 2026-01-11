@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book extends LibraryItem {
+public class Book extends LibraryItem implements Lendable {
     private int id;
     private String title;
     private String author;
@@ -108,6 +108,21 @@ public class Book extends LibraryItem {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void lend(String userId) {
+        this.ownerId = userId;
+    }
+
+    @Override
+    public void returnItem() {
+        this.ownerId = null;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return ownerId == null;
     }
 
     public static List<Object[]> getAllBooks() {
