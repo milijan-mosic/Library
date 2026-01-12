@@ -149,14 +149,10 @@ public class Library {
                 String selectedBookInfo = bookList.getModel().getElementAt(selectedBookIndex);
                 String selectedBookName = selectedBookInfo.split(" - ")[0];
 
-                List<String> activeUserNames = new ArrayList<>();
-
-                if (!users.isEmpty()) {
-                    activeUserNames = users.stream()
-                        .filter(user -> user.getActive() == 1)
-                        .map(User::getName)
-                        .collect(Collectors.toList());
-                }
+                List<String> activeUserNames = User.getAllUsers().stream()
+                    .filter(u -> u.getActive() == 1)
+                    .map(User::getName)
+                    .collect(Collectors.toList());
 
                 WindowUtils.openWindowWithButtonControl(
                     btnLendBook,
