@@ -189,7 +189,7 @@ public class Book extends LibraryItem implements Lendable {
     }
     
     public static void insertBook(String title, String author, String category, String ownerId, int releaseDate, int rating) {
-        String query = "INSERT INTO books (title, author, category, owner_id, release_date) VALUES (?, ?, ?, ?, ?, ?)";
+    	String query = "INSERT INTO books (title, author, category, owner_id, release_date, rating) VALUES (?, ?, ?, ?, ?, ?)";
 
         Connection conn = Database.getConnection();
         
