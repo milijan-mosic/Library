@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Book extends LibraryItem implements Lendable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private String title;
     private String author;

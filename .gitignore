@@ -55,3 +55,4 @@ gradle-wrapper.properties
 # Mine
 *.db
 todo.*
+/bin/
