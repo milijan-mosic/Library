@@ -54,7 +54,7 @@ public class LendingBookWindow extends JFrame {
             String selectedUser = (String) userDropdown.getSelectedItem();
 
             Transaction.makeTransaction(bookTitle, selectedUser);
-            
+
             Library.LoadTransactionsIntoList();
             dispose();
         });
