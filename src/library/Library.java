@@ -32,7 +32,7 @@ public class Library {
     private JButton btnLendBook;
     //
     private static JList<String> userList;
-    private static List<User> users;
+    private List<User> users = new ArrayList<>();
     private JButton btnAddUser;
     private JButton btnEditUser;
     private JButton btnDeleteUser;
@@ -149,7 +149,14 @@ public class Library {
                 String selectedBookInfo = bookList.getModel().getElementAt(selectedBookIndex);
                 String selectedBookName = selectedBookInfo.split(" - ")[0];
 
-                List<String> activeUserNames = users.stream().filter(user -> user.getActive() == 1).map(User::getName).collect(Collectors.toList());
+                List<String> activeUserNames = new ArrayList<>();
+
+                if (!users.isEmpty()) {
+                    activeUserNames = users.stream()
+                        .filter(user -> user.getActive() == 1)
+                        .map(User::getName)
+                        .collect(Collectors.toList());
+                }
 
                 WindowUtils.openWindowWithButtonControl(
                     btnLendBook,
