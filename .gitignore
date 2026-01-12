@@ -40,7 +40,6 @@ nbproject/
 Thumbs.db
 
 # Ignore JDK-specific files
-*.jar
 *.war
 *.ear
 *.class
