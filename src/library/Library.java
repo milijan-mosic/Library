@@ -270,7 +270,7 @@ public class Library {
         chckbxShowActiveUsers.setBounds(876, 701, 132, 25);
         chckbxShowActiveUsers.setSelected(true);
         chckbxShowActiveUsers.addActionListener(e -> {
-            showActiveUsers = !showActiveUsers;
+        	showActiveUsers = chckbxShowActiveUsers.isSelected();
             LoadUsersIntoList();
         });
         frame.getContentPane().add(chckbxShowActiveUsers);
@@ -347,33 +347,24 @@ public class Library {
 
         for (User user : users) {
             boolean activeUser = user.getActive() == 1;
+
+            if (showActiveUsers != activeUser) {
+                continue;
+            }
+
             String status = activeUser ? "" : "-> INACTIVE";
 
-            if (showActiveUsers && !activeUser) {
-                String userInfo = String.format(
-                    "%d. %s (%s) - %s %s",
-                    user.getId(),
-                    user.getName(),
-                    user.getEmail(),
-                    user.getPhoneNumber(),
-                    status
-                );
-                listModel.addElement(userInfo);
-                newUsers.add(user);
-            }
+            String userInfo = String.format(
+                "%d. %s (%s) - %s %s",
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                status
+            );
 
-            if (!showActiveUsers && activeUser) {
-                String userInfo = String.format(
-                    "%d. %s (%s) - %s %s",
-                    user.getId(),
-                    user.getName(),
-                    user.getEmail(),
-                    user.getPhoneNumber(),
-                    status
-                );
-                listModel.addElement(userInfo);
-                newUsers.add(user);
-            }
+            listModel.addElement(userInfo);
+            newUsers.add(user);
         }
 
         users = newUsers;
