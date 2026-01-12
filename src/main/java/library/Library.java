@@ -1,4 +1,4 @@
-package library;
+package main.java.library;
 
 import java.awt.EventQueue;
 import java.time.Instant;
@@ -11,10 +11,10 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import library.models.Book;
-import library.models.Database;
-import library.models.Transaction;
-import library.models.User;
+import main.java.library.models.Book;
+import main.java.library.models.Database;
+import main.java.library.models.Transaction;
+import main.java.library.models.User;
 import library.utils.WindowUtils;
 import library.windows.BookWindow;
 import library.windows.LendingBookWindow;

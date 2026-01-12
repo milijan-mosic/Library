@@ -6,8 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import library.Library;
-import library.models.User;
+import main.java.library.Library;
+import main.java.library.models.User;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;

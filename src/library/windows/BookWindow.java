@@ -6,22 +6,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JTextField;
-
-import library.Library;
-import library.models.Book;
-import javax.swing.JSlider;
+import main.java.library.Library;
+import main.java.library.models.Book;
 
 public class BookWindow extends JFrame {
     private static final long serialVersionUID = 1L;

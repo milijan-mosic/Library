@@ -5,8 +5,8 @@ import javax.swing.*;
 import java.util.List;
 import javax.swing.border.EmptyBorder;
 
-import library.Library;
-import library.models.Transaction;
+import main.java.library.Library;
+import main.java.library.models.Transaction;
 
 public class LendingBookWindow extends JFrame {
     private static final long serialVersionUID = 1L;
