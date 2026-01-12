@@ -244,16 +244,17 @@ public class Library {
 
             if (selectedTransactionIndex != -1) {
                 String selectedTransactionText = transactionList.getModel().getElementAt(selectedTransactionIndex);
+                String[] splittedText = selectedTransactionText.split(" ");
 
-                String bookName = selectedTransactionText.split(" -> ")[0];
-                String userName = selectedTransactionText.split(" -> ")[1].split("\\|")[0].trim();
+                String bookName = splittedText[2];
+                String userName = splittedText[6];
 
-                System.out.println("bookName -> " + bookName);
-                System.out.println("userName -> " + userName);
+                int bookId = Integer.parseInt(bookName);
+                int userId = Integer.parseInt(userName);
 
-                int bookId = Transaction.getBookIdByName(bookName);
-                int userId = Transaction.getUserIdByName(userName);
-
+                System.out.println("bookId -> " + bookId);
+                System.out.println("userId -> " + userId);
+                
                 Transaction.updateTransaction(bookId, userId);
                 LoadTransactionsIntoList();
             }
